@@ -1,0 +1,7 @@
+# Default ignored files
+/.idea
+/.idea/
+/src/main/resources/telegramBotToken.txt
+/src/main/resources/telegramBotUsername.txt
+/target
+/target/
