@@ -3,5 +3,8 @@
 /.idea/
 /src/main/resources/telegramBotToken.txt
 /src/main/resources/telegramBotUsername.txt
+/src/main/resources/mongodbUsername.txt
+/src/main/resources/mongodbPassword.txt
 /target
 /target/
+
