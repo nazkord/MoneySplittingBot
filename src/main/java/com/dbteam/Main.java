@@ -12,6 +12,7 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiRequestException;
 
 public class Main {
+
     private static final String DATABASE_NAME = "botdb";
 
     public static void main(String[] args) throws TelegramApiRequestException {
@@ -21,8 +22,8 @@ public class Main {
         ApiContextInitializer.init();
 
         MongoDatabase db = getMongoDatabase();
-        db.getCollection("users").insertOne(new Document("username", "szelemeh")
-                .append("groupId", 1));
+        db.getCollection("users").insertOne(new Document("username", "checkCheck")
+                .append("groupId", 2));
 
         MoneySplittingBot mBot = new MoneySplittingBot();
 
@@ -39,7 +40,7 @@ public class Main {
         String username = PropertyHelper.getMongoUsername();
         String password = PropertyHelper.getMongoPassword();
         MongoClient mongoClient = MongoClients.create(
-                "mongodb+srv://"+username+":"+password+
+                "mongodb+srv://" + username + ":" + password +
                         "@moneybot-qwdm2.mongodb.net/test?retryWrites=true&w=majority");
         return mongoClient.getDatabase(DATABASE_NAME);
     }
