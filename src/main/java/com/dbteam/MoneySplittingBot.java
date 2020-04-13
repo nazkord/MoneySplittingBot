@@ -1,31 +1,35 @@
 package com.dbteam;
 
-import org.telegram.telegrambots.bots.TelegramLongPollingBot;
-import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
-import org.telegram.telegrambots.meta.api.objects.Message;
-import org.telegram.telegrambots.meta.api.objects.Update;
-import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
+import org.springframework.stereotype.Component;
+import org.telegram.abilitybots.api.bot.AbilityBot;
+import org.telegram.abilitybots.api.objects.Ability;
 
-public class MoneySplittingBot extends TelegramLongPollingBot {
+import static org.telegram.abilitybots.api.objects.Locality.ALL;
+import static org.telegram.abilitybots.api.objects.Privacy.PUBLIC;
 
-    public void onUpdateReceived(Update update) {
+@Component
+public class MoneySplittingBot extends AbilityBot {
 
-        //here the magic happens ;)
-        Message received = update.getMessage();
-        SendMessage newMessage = new SendMessage(received.getChatId(), received.getText());
+    private final int creatorId;
 
-        try {
-            execute(newMessage);
-        } catch (TelegramApiException e) {
-            e.printStackTrace();
-        }
+    public MoneySplittingBot(BotConfiguration botConfiguration) {
+        super(botConfiguration.getBotToken(), botConfiguration.getBotName());
+        creatorId = botConfiguration.getCreatorId();
     }
 
-    public String getBotUsername() {
-        return PropertyHelper.getBotUsername();
+    @Override
+    public int creatorId() {
+        return creatorId;
     }
-
-    public String getBotToken() {
-        return PropertyHelper.getBotToken();
+    
+    public Ability sayHelloWorld() {
+        return Ability
+                .builder()
+                .name("hello")
+                .info("says hello world!")
+                .locality(ALL)
+                .privacy(PUBLIC)
+                .action(ctx -> silent.send("Hello world!", ctx.chatId()))
+                .build();
     }
 }
