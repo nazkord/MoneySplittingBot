@@ -21,12 +21,22 @@ public class MoneySplittingBot extends AbilityBot {
     public int creatorId() {
         return creatorId;
     }
-    
+
     public Ability sayHelloWorld() {
         return Ability
                 .builder()
                 .name("hello")
                 .info("says hello world!")
+                .locality(ALL)
+                .privacy(PUBLIC)
+                .action(ctx -> silent.send("Hello world!", ctx.chatId()))
+                .build();
+    }
+
+    public Ability replyOnStartMessage() {
+        return Ability
+                .builder()
+                .name("start")
                 .locality(ALL)
                 .privacy(PUBLIC)
                 .action(ctx -> silent.send("Hello world!", ctx.chatId()))
