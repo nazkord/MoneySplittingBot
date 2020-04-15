@@ -1,11 +1,18 @@
 package com.dbteam;
 
+import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Component;
 import org.telegram.abilitybots.api.bot.AbilityBot;
 import org.telegram.abilitybots.api.objects.Ability;
+import org.telegram.abilitybots.api.objects.Reply;
+import org.telegram.abilitybots.api.objects.ReplyFlow;
+import org.telegram.telegrambots.meta.api.objects.Update;
+
+import java.util.function.Predicate;
 
 import static org.telegram.abilitybots.api.objects.Locality.ALL;
 import static org.telegram.abilitybots.api.objects.Privacy.PUBLIC;
+import static org.telegram.abilitybots.api.util.AbilityUtils.getChatId;
 
 @Component
 public class MoneySplittingBot extends AbilityBot {
@@ -30,16 +37,10 @@ public class MoneySplittingBot extends AbilityBot {
                 .locality(ALL)
                 .privacy(PUBLIC)
                 .action(ctx -> silent.send("Hello world!", ctx.chatId()))
-                .build();
-    }
-
-    public Ability replyOnStartMessage() {
-        return Ability
-                .builder()
-                .name("start")
-                .locality(ALL)
-                .privacy(PUBLIC)
-                .action(ctx -> silent.send("Hello world!", ctx.chatId()))
+//                .reply(upd -> {
+//                    System.out.println(upd.getMessage().getReplyToMessage());
+//                    silent.send("It's been nice playing with you!", upd.getMessage().getChatId());
+//                })
                 .build();
     }
 }
