@@ -13,7 +13,7 @@ public class Person {
     @Id
     String username;
     String fullName;
-    Long groupId;
+    Long groupChatId;
     Long chatId;
     String state;
 }

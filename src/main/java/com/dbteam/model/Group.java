@@ -9,11 +9,10 @@ import java.util.List;
 
 @Data
 @AllArgsConstructor
-@Document
+@Document(collection = "groups")
 public class Group {
 
     @Id
-    Long groupId;
     Long groupChatId;
     List<Person> people;
 }
