@@ -16,4 +16,4 @@ public class Person {
     Long groupChatId;
     Long chatId;
     String state;
-}
+} 
