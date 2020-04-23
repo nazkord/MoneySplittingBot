@@ -1,16 +1,19 @@
 package com.dbteam.model;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Data
-@Document
-public class User {
+@AllArgsConstructor
+@Document(collection = "users")
+public class Person {
 
     @Id
     String username;
-    Long groupId;
+    String fullName;
+    Long groupChatId;
     Long chatId;
     String state;
-}
+} 

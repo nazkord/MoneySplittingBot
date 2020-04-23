@@ -1,21 +1,24 @@
 package com.dbteam.model;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.List;
 
 @Data
+@AllArgsConstructor
 @Document
 public class Purchase {
 
     @Id
     Long purchaseId;
     String buyerUsername;
-    Date date;
+    LocalDate date;
     String title;
+    Long amount;
     String description;
-    List<User> recipients;
+    List<Person> recipients;
 }
