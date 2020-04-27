@@ -1,9 +1,11 @@
 package com.dbteam;
 
+import com.dbteam.exception.IllegalUsernameException;
 import com.dbteam.model.Group;
 import com.dbteam.model.Person;
 import com.dbteam.repository.GroupRepository;
 import com.dbteam.repository.PersonRepository;
+import com.dbteam.service.PersonService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.telegram.abilitybots.api.bot.AbilityBot;
@@ -22,7 +24,7 @@ public class MoneySplittingBot extends AbilityBot {
     private final int creatorId;
 
     @Autowired
-    PersonRepository personRepository;
+    PersonService personService;
 
     @Autowired
     GroupRepository groupRepository;
@@ -49,12 +51,16 @@ public class MoneySplittingBot extends AbilityBot {
                 .privacy(PUBLIC)
                 .action(ctx -> {
                     User telegramUser = ctx.update().getMessage().getFrom();
-                    personRepository.save(new Person(telegramUser.getUserName(),
+                    personService.updatePerson(new Person(telegramUser.getUserName(),
                             telegramUser.getFirstName() + " " + telegramUser.getLastName(),
                             ctx.chatId(), ctx.chatId(), null));
-                    Optional<Person> person = personRepository.findUserByUsername(telegramUser.getUserName());
-                    groupRepository.save(new Group(ctx.chatId(), Collections.singletonList(person.get())));
-                    silent.send(person.get().getFullName(), ctx.chatId());
+                    try {
+                        Person person = personService.findPersonByUsername(telegramUser.getUserName());
+//                        groupRepository.save(new Group(ctx.chatId(), Collections.singletonList(person)));
+                        silent.send(person.getFullName(), ctx.chatId());
+                    } catch (IllegalUsernameException e) {
+                        silent.send("There is no such user in db", ctx.chatId());
+                    }
                 })
                 .build();
     }

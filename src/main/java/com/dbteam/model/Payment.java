@@ -13,7 +13,7 @@ public class Payment {
     @Id
     Long paymentId;
     String payer;
-    Long amount;
+    Double amount;
     String recipient;
     Boolean isConfirmed;
 }

@@ -18,7 +18,7 @@ public class Purchase {
     String buyerUsername;
     LocalDate date;
     String title;
-    Long amount;
+    Double amount;
     String description;
     List<Person> recipients;
 }
