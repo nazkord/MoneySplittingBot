@@ -9,4 +9,7 @@ import java.util.List;
 @Repository
 public interface PaymentRepository extends MongoRepository<Payment, Long> {
     List<Payment> getPaymentsByRecipientAndIsConfirmedIsFalse(String recipientUsername);
+    List<Payment> getPaymentsByRecipientAndIsConfirmedIsTrue(String recipientUsername);
+    List<Payment> getPaymentsByPayerAndIsConfirmedIsTrue(String payerUsername);
+    List<Payment> getPaymentsByPayerAndIsConfirmedIsFalse(String payerUsername);
 }

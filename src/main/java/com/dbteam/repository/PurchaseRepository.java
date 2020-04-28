@@ -10,8 +10,7 @@ import java.util.List;
 
 @Repository
 public interface PurchaseRepository extends MongoRepository<Purchase, Long> {
-    List<Purchase> getPurchasesByBuyerUsername(String buyerUsername);
-    List<Purchase> getPurchasesByBuyerUsernameAndDateBetween(String buyerUsername, LocalDate start, LocalDate end);
+    List<Purchase> getPurchasesByBuyer(String buyerUsername);
+    List<Purchase> getPurchasesByBuyerAndDateBetween(String buyerUsername, LocalDate start, LocalDate end);
     List<Purchase> getPurchasesByRecipientsContains(Person person);
-
 }
