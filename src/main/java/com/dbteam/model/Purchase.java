@@ -16,7 +16,7 @@ public class Purchase {
     @Id
     Long purchaseId;
     Long groupChatId;
-    String buyerUsername;
+    String buyer;
     LocalDate date;
     String title;
     Double amount;

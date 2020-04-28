@@ -40,7 +40,7 @@ public class PurchaseRepositoryTest {
     @Test
     public void getPurchasesByBuyerUsername() {
         //when
-        List<Purchase> actualPurchases = purchaseRepository.getPurchasesByBuyerUsername("Vasia");
+        List<Purchase> actualPurchases = purchaseRepository.getPurchasesByBuyer("Vasia");
 
         //then
         assertEquals(2, actualPurchases.size());
@@ -54,7 +54,7 @@ public class PurchaseRepositoryTest {
     @Test
     public void getPurchasesByBuyerUsernameAndDateBetween() {
         //when
-        List<Purchase> actualPurchases = purchaseRepository.getPurchasesByBuyerUsernameAndDateBetween("Vasia",
+        List<Purchase> actualPurchases = purchaseRepository.getPurchasesByBuyerAndDateBetween("Vasia",
                 LocalDate.now().plusDays(1), LocalDate.now().plusDays(5));
 
         //then
@@ -69,6 +69,6 @@ public class PurchaseRepositoryTest {
 
         //then
         assertEquals(2, actualPurchases.size());
-        actualPurchases.forEach(purchase -> assertEquals("Vasia", purchase.getBuyerUsername()));
+        actualPurchases.forEach(purchase -> assertEquals("Vasia", purchase.getBuyer()));
     }
 }
