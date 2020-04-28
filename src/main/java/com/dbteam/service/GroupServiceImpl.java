@@ -14,31 +14,24 @@ public class GroupServiceImpl implements GroupService{
     @Autowired
     private GroupRepository groupRepository;
 
-    private PersonService personService= new PersonServiceImpl();
+    @Autowired
+    private PersonService personService = new PersonServiceImpl();
 
     @Override
-    public Group findGroupById(long groupChatId) throws IllegalGroupChatIdException {
+    public Group findGroupById(Long groupChatId) throws IllegalGroupChatIdException {
         Optional<Group> optionalGroup = groupRepository.findGroupByGroupChatId(groupChatId);
         return optionalGroup.orElseThrow(() -> new IllegalGroupChatIdException("There is no group in db with chat id: " + groupChatId));
     }
 
     @Override
-    public void addUserToGroup(long groupChatId, String username) throws IllegalGroupChatIdException {
+    public void addUserToGroup(Long groupChatId, Person person) throws IllegalGroupChatIdException {
         Group group = findGroupById(groupChatId);
-        Person person;
-        try {
-            person = personService.findPersonByUsername(username);
-        }
-        catch (IllegalUsernameException e){
-            person = new Person();
-            person.setUsername(username);
-            personService.addPerson(person);
-        }
-        group.addUser(person);
+        personService.addPerson(person);
+        group.getPeople().add(person);
     }
 
     @Override
-    public Boolean isUserInGroup(long groupChatId, String username) throws IllegalGroupChatIdException, IllegalUsernameException {
+    public Boolean isUserInGroup(Long groupChatId, String username) throws IllegalGroupChatIdException, IllegalUsernameException {
         Group group = findGroupById(groupChatId);
         Person person = personService.findPersonByUsername(username);
         return group.getPeople().contains(person);

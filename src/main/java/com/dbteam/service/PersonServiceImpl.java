@@ -35,11 +35,13 @@ public class PersonServiceImpl implements PersonService {
     public void updatePersonBotChatState(String username, String newState) throws IllegalUsernameException {
         Person person = findPersonByUsername(username);
         person.setBotChatState(newState);
+        updatePerson(person);
     }
 
     @Override
     public void updatePersonGroupChatState(String username, String newState) throws IllegalUsernameException {
         Person person = findPersonByUsername(username);
         person.setGroupChatState(newState);
+        updatePerson(person);
     }
 }
