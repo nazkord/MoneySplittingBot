@@ -17,13 +17,15 @@ public class Person {
     String fullName;
     Long groupChatId;
     Long chatId;
-    String state;
+    String groupChatState;
+    String botChatState;
 
     public void saveTo(Person person) {
         person.setUsername(this.username);
         person.setFullName(this.fullName);
         person.setGroupChatId(this.groupChatId);
         person.setChatId(this.chatId);
-        person.setState(this.state);
+        person.setGroupChatId(this.groupChatId);
+        person.setBotChatState(this.botChatState);
     }
 } 

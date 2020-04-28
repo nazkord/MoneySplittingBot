@@ -19,8 +19,8 @@ public class PaymentRepositoryTest {
     @Test
     void getPaymentsByRecipientAndIsConfirmedIsFalse(@Autowired PaymentRepository paymentRepository) {
         //given
-        Payment payment1 = new Payment(1L,"Vasia", 10D, "Pronia2", true);
-        Payment payment2 = new Payment(2L,"Pronia", 10D, "Pronia2", false);
+        Payment payment1 = new Payment(1L,5L,"Vasia", 10D, "Pronia2", true);
+        Payment payment2 = new Payment(2L,5L,"Pronia", 10D, "Pronia2", false);
         paymentRepository.saveAll(List.of(payment1, payment2));
 
         //when

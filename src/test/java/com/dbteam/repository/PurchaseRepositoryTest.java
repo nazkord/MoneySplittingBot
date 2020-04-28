@@ -27,12 +27,12 @@ public class PurchaseRepositoryTest {
 
     @BeforeAll
     public void setUp() {
-        Person person = new Person("Pronia", "Pronia", 1L, 2L, null);
-        actualRecipient = new Person("Jan", "Jan Kowalski", 1L, 2L, null);
+        Person person = new Person("Pronia", "Pronia", 1L, 2L, null, null);
+        actualRecipient = new Person("Jan", "Jan Kowalski", 1L, 2L, null, null);
         List<Person> recipients = List.of(person, actualRecipient);
-        Purchase purchase1 = new Purchase(1L, "Vasia", LocalDate.now().plusDays(3), "Lewik", 10D, "", recipients);
-        Purchase purchase2 = new Purchase(2L, "Vasia", LocalDate.now(), "Lidl", 20D, "", recipients);
-        Purchase purchase3 = new Purchase(3L, "Jan", LocalDate.now().minusDays(5), "Lewik", 30D, "",
+        Purchase purchase1 = new Purchase(1L, 5L,"Vasia", LocalDate.now().plusDays(3), "Lewik", 10D, "", recipients);
+        Purchase purchase2 = new Purchase(2L, 5L, "Vasia", LocalDate.now(), "Lidl", 20D, "", recipients);
+        Purchase purchase3 = new Purchase(3L, 5L, "Jan", LocalDate.now().minusDays(5), "Lewik", 30D, "",
                 Collections.singletonList(person));
         purchaseRepository.saveAll(List.of(purchase1, purchase2, purchase3));
     }

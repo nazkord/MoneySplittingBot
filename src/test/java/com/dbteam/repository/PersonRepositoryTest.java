@@ -18,7 +18,7 @@ public class PersonRepositoryTest {
     @Test
     void findUserByUsername(@Autowired PersonRepository personRepository) {
         //given
-        Person expectedPerson = new Person("Vasia", "Vasia Pupkin", 1L,2L,null);
+        Person expectedPerson = new Person("Vasia", "Vasia Pupkin", 1L,2L, null, null);
         personRepository.save(expectedPerson);
 
         //when

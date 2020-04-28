@@ -53,7 +53,7 @@ public class MoneySplittingBot extends AbilityBot {
                     User telegramUser = ctx.update().getMessage().getFrom();
                     personService.updatePerson(new Person(telegramUser.getUserName(),
                             telegramUser.getFirstName() + " " + telegramUser.getLastName(),
-                            ctx.chatId(), ctx.chatId(), null));
+                            ctx.chatId(), ctx.chatId(), null, null));
                     try {
                         Person person = personService.findPersonByUsername(telegramUser.getUserName());
 //                        groupRepository.save(new Group(ctx.chatId(), Collections.singletonList(person)));

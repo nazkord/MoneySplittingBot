@@ -12,6 +12,7 @@ public class Payment {
 
     @Id
     Long paymentId;
+    Long groupChatId;
     String payer;
     Double amount;
     String recipient;
