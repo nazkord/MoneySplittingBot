@@ -5,7 +5,6 @@ import com.dbteam.model.Person;
 import com.dbteam.repository.PersonRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import java.util.Optional;
 
 @Service
@@ -30,5 +29,17 @@ public class PersonServiceImpl implements PersonService {
     public Person findPersonByUsername(String username) throws IllegalUsernameException {
         Optional<Person> optionalPerson = personRepository.findUserByUsername(username);
         return optionalPerson.orElseThrow(() -> new IllegalUsernameException("There is no person in db with username: " + username));
+    }
+
+    @Override
+    public void updatePersonBotChatState(String username, String newState) throws IllegalUsernameException {
+        Person person = findPersonByUsername(username);
+        person.setBotChatState(newState);
+    }
+
+    @Override
+    public void updatePersonGroupChatState(String username, String newState) throws IllegalUsernameException {
+        Person person = findPersonByUsername(username);
+        person.setGroupChatState(newState);
     }
 }

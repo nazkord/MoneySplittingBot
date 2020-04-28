@@ -15,4 +15,12 @@ public class Group {
     @Id
     Long groupChatId;
     List<Person> people;
+
+    public void addUser(Person newUser){
+        this.people.add(newUser);
+    }
+
+    public List<Person> getPeople(){
+        return this.people;
+    }
 }
