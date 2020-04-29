@@ -8,8 +8,8 @@ import java.util.List;
 
 @Repository
 public interface PaymentRepository extends MongoRepository<Payment, Long> {
-    List<Payment> getPaymentsByRecipientAndIsConfirmedIsFalse(String recipientUsername);
-    List<Payment> getPaymentsByRecipientAndIsConfirmedIsTrue(String recipientUsername);
-    List<Payment> getPaymentsByPayerAndIsConfirmedIsTrue(String payerUsername);
-    List<Payment> getPaymentsByPayerAndIsConfirmedIsFalse(String payerUsername);
+    List<Payment> getPaymentsByRecipientAndIsConfirmedIsFalseAndGroupChatId(String recipientUsername, Long groupChatId);
+    List<Payment> getPaymentsByRecipientAndIsConfirmedIsTrueAndGroupChatId(String recipientUsername, Long groupChatId);
+    List<Payment> getPaymentsByPayerAndIsConfirmedIsTrueAndGroupChatId(String payerUsername, Long groupChatId);
+    List<Payment> getPaymentsByPayerAndIsConfirmedIsFalseAndGroupChatId(String payerUsername, Long groupChatId);
 }

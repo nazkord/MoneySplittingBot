@@ -40,7 +40,7 @@ public class PurchaseRepositoryTest {
     @Test
     public void getPurchasesByBuyerUsername() {
         //when
-        List<Purchase> actualPurchases = purchaseRepository.getPurchasesByBuyer("Vasia");
+        List<Purchase> actualPurchases = purchaseRepository.getPurchasesByBuyerAndGroupChatId("Vasia", 5L);
 
         //then
         assertEquals(2, actualPurchases.size());
@@ -54,7 +54,7 @@ public class PurchaseRepositoryTest {
     @Test
     public void getPurchasesByBuyerUsernameAndDateBetween() {
         //when
-        List<Purchase> actualPurchases = purchaseRepository.getPurchasesByBuyerAndDateBetween("Vasia",
+        List<Purchase> actualPurchases = purchaseRepository.getPurchasesByBuyerAndGroupChatIdAndDateBetween("Vasia", 5L,
                 LocalDate.now().plusDays(1), LocalDate.now().plusDays(5));
 
         //then
@@ -65,10 +65,19 @@ public class PurchaseRepositoryTest {
     @Test
     public void getPurchasesByRecipientsContains() {
         //when
-        List<Purchase> actualPurchases = purchaseRepository.getPurchasesByRecipientsContains(actualRecipient);
+        List<Purchase> actualPurchases = purchaseRepository.getPurchasesByRecipientsContainsAndGroupChatId(actualRecipient, 5L);
 
         //then
         assertEquals(2, actualPurchases.size());
         actualPurchases.forEach(purchase -> assertEquals("Vasia", purchase.getBuyer()));
+    }
+
+    @Test
+    public void getPurchasesByRecipientsContainsAndNotFromGroup() {
+        //when
+        List<Purchase> actualPurchases = purchaseRepository.getPurchasesByRecipientsContainsAndGroupChatId(actualRecipient, 4L);
+
+        //then
+        assertEquals(0, actualPurchases.size());
     }
 }

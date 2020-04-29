@@ -23,18 +23,19 @@ public class PaymentRepositoryTest {
 
     @BeforeAll()
     public void setUp() {
-        Payment payment1 = new Payment(1L,5L,"Vasia", 10D, "Pronia", true);
-        Payment payment2 = new Payment(2L,5L,"Pronia", 20D, "Vasia", false);
-        Payment payment3 = new Payment(3L,5L,"Vasia", 30D, "Pronia", false);
-        Payment payment4 = new Payment(4L,5L,"Pronia", 40D, "Vasia", true);
-        Payment payment5 = new Payment(5L,5L,"Vasia", 50D, "Pronia", true);
-        paymentRepository.saveAll(List.of(payment1, payment2, payment3, payment4, payment5));
+        Payment payment1 = new Payment(1L,1L,"Vasia", 10D, "Pronia", true);
+        Payment payment2 = new Payment(2L,1L,"Pronia", 20D, "Vasia", false);
+        Payment payment3 = new Payment(3L,1L,"Vasia", 30D, "Pronia", false);
+        Payment payment4 = new Payment(4L,1L,"Pronia", 40D, "Vasia", true);
+        Payment payment5 = new Payment(5L,2L,"Vasia", 50D, "Pronia", true);
+        Payment payment6 = new Payment(6L,2L,"Pronia", 60D, "Vasia", false);
+        paymentRepository.saveAll(List.of(payment1, payment2, payment3, payment4, payment5, payment6));
     }
 
     @Test
-    public void getPaymentsByRecipientAndIsConfirmedIsFalse() {
+    public void getPaymentsByRecipientAndIsConfirmedIsFalseAndGroupChatId() {
         //when
-        List<Payment> list = paymentRepository.getPaymentsByRecipientAndIsConfirmedIsFalse("Pronia");
+        List<Payment> list = paymentRepository.getPaymentsByRecipientAndIsConfirmedIsFalseAndGroupChatId("Pronia", 1L);
 
         //then
         assertEquals(1, list.size());
@@ -42,9 +43,9 @@ public class PaymentRepositoryTest {
     }
 
     @Test
-    public void getPaymentsByRecipientAndIsConfirmedIsTrue() {
+    public void getPaymentsByRecipientAndIsConfirmedIsTrueAndGroupChatId() {
         //when
-        List<Payment> payments = paymentRepository.getPaymentsByRecipientAndIsConfirmedIsTrue("Vasia");
+        List<Payment> payments = paymentRepository.getPaymentsByRecipientAndIsConfirmedIsTrueAndGroupChatId("Vasia", 1L);
 
         //then
         assertEquals(1, payments.size());
@@ -52,26 +53,22 @@ public class PaymentRepositoryTest {
     }
 
     @Test
-    public void getPaymentsByPayerAndIsConfirmedIsTrue() {
+    public void getPaymentsByPayerAndIsConfirmedIsTrueAndGroupChatId() {
         //when
-        List<Payment> payments = paymentRepository.getPaymentsByPayerAndIsConfirmedIsTrue("Vasia");
-
-        //then
-        assertEquals(2, payments.size());
-        Double amounts = payments
-                .stream()
-                .mapToDouble(Payment::getAmount)
-                .sum();
-        assertEquals(60D, amounts);
-    }
-
-    @Test
-    public void getPaymentsByPayerAndIsConfirmedIsFalse() {
-        //when
-        List<Payment> payments = paymentRepository.getPaymentsByPayerAndIsConfirmedIsFalse("Pronia");
+        List<Payment> payments = paymentRepository.getPaymentsByPayerAndIsConfirmedIsTrueAndGroupChatId("Vasia", 2L);
 
         //then
         assertEquals(1, payments.size());
-        assertEquals(20D, payments.get(0).getAmount());
+        assertEquals(50D, payments.get(0).getAmount());
+    }
+
+    @Test
+    public void getPaymentsByPayerAndIsConfirmedIsFalseAndGroupChatId() {
+        //when
+        List<Payment> payments = paymentRepository.getPaymentsByPayerAndIsConfirmedIsFalseAndGroupChatId("Pronia", 2L);
+
+        //then
+        assertEquals(1, payments.size());
+        assertEquals(60D, payments.get(0).getAmount());
     }
 }
