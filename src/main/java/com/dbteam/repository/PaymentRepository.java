@@ -12,4 +12,13 @@ public interface PaymentRepository extends MongoRepository<Payment, Long> {
     List<Payment> getPaymentsByRecipientAndIsConfirmedIsTrueAndGroupChatId(String recipientUsername, Long groupChatId);
     List<Payment> getPaymentsByPayerAndIsConfirmedIsTrueAndGroupChatId(String payerUsername, Long groupChatId);
     List<Payment> getPaymentsByPayerAndIsConfirmedIsFalseAndGroupChatId(String payerUsername, Long groupChatId);
+    /**
+     * Get all confirmed payments of a specific group.
+     */
+    List<Payment> getPaymentsByGroupChatIdAndIsConfirmedIsTrue(Long groupChatId);
+
+    /**
+     * Get all unconfirmed payments of a specific group
+     */
+    List<Payment> getPaymentsByGroupChatIdAndIsConfirmedIsFalse(Long groupChatId);
 }

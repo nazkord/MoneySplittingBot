@@ -71,4 +71,25 @@ public class PaymentRepositoryTest {
         assertEquals(1, payments.size());
         assertEquals(60D, payments.get(0).getAmount());
     }
+
+    @Test
+    public void getPaymentsByGroupChatIdAndIsConfirmedIsTrue() {
+        // when
+        List<Payment> payments = paymentRepository.getPaymentsByGroupChatIdAndIsConfirmedIsTrue(1L);
+
+        // then
+        assertEquals(2, payments.size());
+        assertEquals(10D, payments.get(0).getAmount());
+
+    }
+
+    @Test
+    public void getPaymentsByGroupChatIdAndIsConfirmedIsFalse() {
+        // when
+        List<Payment> payments = paymentRepository.getPaymentsByGroupChatIdAndIsConfirmedIsFalse(1L);
+
+        // then
+        assertEquals(2, payments.size());
+        assertEquals(20D, payments.get(0).getAmount());
+    }
 }
