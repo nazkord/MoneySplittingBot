@@ -1,6 +1,7 @@
-package com.dbteam.service;
+package com.dbteam.service.serviceImpl;
 
 import com.dbteam.repository.PersonRepository;
+import com.dbteam.service.PaymentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

@@ -1,8 +1,9 @@
-package com.dbteam.service;
+package com.dbteam.service.serviceImpl;
 
 import com.dbteam.exception.IllegalUsernameException;
 import com.dbteam.model.Person;
 import com.dbteam.repository.PersonRepository;
+import com.dbteam.service.PersonService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.Optional;

@@ -19,7 +19,6 @@ public class Person {
     Long chatId;
     String groupChatState;
     String botChatState;
-    
 
     public void saveTo(Person person) {
         person.setUsername(this.username);
