@@ -19,30 +19,7 @@ public class Person {
     Long chatId;
     String groupChatState;
     String botChatState;
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public void setFullName(String fullName) {
-        this.fullName = fullName;
-    }
-
-    public void setGroupChatId(Long groupChatId) {
-        this.groupChatId = groupChatId;
-    }
-
-    public void setChatId(Long chatId) {
-        this.chatId = chatId;
-    }
-
-    public void setGroupChatState(String groupChatState) {
-        this.groupChatState = groupChatState;
-    }
-
-    public void setBotChatState(String botChatState) {
-        this.botChatState = botChatState;
-    }
+    
 
     public void saveTo(Person person) {
         person.setUsername(this.username);
