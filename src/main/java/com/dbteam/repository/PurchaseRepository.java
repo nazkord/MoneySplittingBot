@@ -10,7 +10,15 @@ import java.util.List;
 
 @Repository
 public interface PurchaseRepository extends MongoRepository<Purchase, Long> {
+
     List<Purchase> getPurchasesByBuyerAndGroupChatId(String buyerUsername, Long groupChatId);
+
     List<Purchase> getPurchasesByBuyerAndGroupChatIdAndDateBetween(String buyerUsername, Long groupChatId, LocalDate start, LocalDate end);
+
     List<Purchase> getPurchasesByRecipientsContainsAndGroupChatId(Person person, Long groupChatId);
+
+    /**
+     * Get all purchases of group.
+     */
+    List<Purchase> getPurchaseByGroupChatId(Long groupChatId);
 }

@@ -6,6 +6,8 @@ import com.dbteam.repository.PersonRepository;
 import com.dbteam.service.PersonService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -44,5 +46,10 @@ public class PersonServiceImpl implements PersonService {
         Person person = findPersonByUsername(username);
         person.setGroupChatState(newState);
         updatePerson(person);
+    }
+
+    @Override
+    public List<Person> getPersonsOfGroup(Long groupChatId) {
+        return personRepository.getDistinctByGroupChatId(groupChatId);
     }
 }
