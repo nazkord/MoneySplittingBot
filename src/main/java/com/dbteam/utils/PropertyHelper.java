@@ -1,4 +1,6 @@
-package com.dbteam;
+package com.dbteam.utils;
+
+import com.dbteam.MoneySplittingBot;
 
 import java.io.IOException;
 
