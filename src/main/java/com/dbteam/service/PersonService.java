@@ -16,5 +16,4 @@ public interface PersonService {
 
     void updatePersonGroupChatState(String username, String newState) throws IllegalUsernameException;
 
-    List<Person> getPersonsOfGroup(Long groupChatId);
 }

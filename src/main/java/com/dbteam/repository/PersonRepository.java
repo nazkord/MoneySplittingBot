@@ -12,6 +12,4 @@ public interface PersonRepository extends MongoRepository<Person, String> {
 
     Optional<Person> findUserByUsername(String username);
 
-    List<Person> getDistinctByGroupChatId(Long groupChatId);
-
 }

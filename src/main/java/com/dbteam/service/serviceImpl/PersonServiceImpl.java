@@ -47,9 +47,4 @@ public class PersonServiceImpl implements PersonService {
         person.setGroupChatState(newState);
         updatePerson(person);
     }
-
-    @Override
-    public List<Person> getPersonsOfGroup(Long groupChatId) {
-        return personRepository.getDistinctByGroupChatId(groupChatId);
-    }
 }
