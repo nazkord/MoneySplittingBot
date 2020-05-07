@@ -21,42 +21,48 @@ public class PaymentServiceImpl implements PaymentService {
     }
 
     @Override
-    public List<Payment> getPaymentsWithRecipient(String recipientUsername, Long groupChatId, boolean isConfirmed) {
-        if (isConfirmed)
-            return paymentRepository
-                    .getPaymentsByRecipientAndIsConfirmedIsTrueAndGroupChatId(
-                            recipientUsername,
-                            groupChatId);
-        else
-            return paymentRepository
+    public List<Payment> getConfirmedPaymentsWithRecipient(String recipientUsername, Long groupChatId) {
+        return paymentRepository
+                .getPaymentsByRecipientAndIsConfirmedIsTrueAndGroupChatId(
+                        recipientUsername,
+                        groupChatId);
+
+    }
+
+    @Override
+    public List<Payment> getUnconfirmedPaymentsWithRecipient(String recipientUsername, Long groupChatId) {
+        return paymentRepository
                 .getPaymentsByRecipientAndIsConfirmedIsFalseAndGroupChatId(
-                    recipientUsername,
-                    groupChatId);
+                        recipientUsername,
+                        groupChatId);
     }
 
     @Override
-    public List<Payment> getPaymentsWithPayer(String payerUsername, Long groupChatId, boolean isConfirmed) {
-        if (isConfirmed)
-            return paymentRepository
-                    .getPaymentsByPayerAndIsConfirmedIsTrueAndGroupChatId(
-                            payerUsername,
-                            groupChatId);
-        else
-            return paymentRepository
-                    .getPaymentsByPayerAndIsConfirmedIsFalseAndGroupChatId(
-                            payerUsername,
-                            groupChatId);
+    public List<Payment> getConfirmedPaymentsWithPayer(String payerUsername, Long groupChatId) {
+        return paymentRepository
+                .getPaymentsByPayerAndIsConfirmedIsTrueAndGroupChatId(
+                        payerUsername,
+                        groupChatId);
     }
 
     @Override
-    public List<Payment> getPaymentsOfGroup(Long groupChatId, boolean isConfirmed) {
-        if (isConfirmed)
-            return paymentRepository
+    public List<Payment> getUnconfirmedPaymentsWithPayer(String payerUsername, Long groupChatId) {
+        return paymentRepository
+                .getPaymentsByPayerAndIsConfirmedIsFalseAndGroupChatId(
+                        payerUsername,
+                        groupChatId);
+    }
+
+    @Override
+    public List<Payment> getConfirmedPaymentsOfGroup(Long groupChatId) {
+        return paymentRepository
                     .getPaymentsByGroupChatIdAndIsConfirmedIsTrue(groupChatId);
-        else
-            return paymentRepository
-                    .getPaymentsByGroupChatIdAndIsConfirmedIsFalse(groupChatId);
+
     }
 
-
+    @Override
+    public List<Payment> getUnconfirmedPaymentsOfGroup(Long groupChatId) {
+        return paymentRepository
+                .getPaymentsByGroupChatIdAndIsConfirmedIsFalse(groupChatId);
+    }
 }

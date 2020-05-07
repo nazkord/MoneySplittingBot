@@ -80,10 +80,9 @@ public class BalanceServiceImpl implements BalanceService {
 
     private void applyInPayments() {
         List<Payment> payments = paymentService
-                .getPaymentsWithRecipient(
+                .getConfirmedPaymentsWithRecipient(
                         targetPerson.getUsername(),
-                        targetGroup.getGroupChatId(),
-                        true);
+                        targetGroup.getGroupChatId());
 
         payments.forEach( payment -> {
 
@@ -96,10 +95,9 @@ public class BalanceServiceImpl implements BalanceService {
 
     private void applyOutPayments() {
         List<Payment> payments = paymentService
-                .getPaymentsWithPayer(
+                .getConfirmedPaymentsWithPayer(
                         targetPerson.getUsername(),
-                        targetGroup.getGroupChatId(),
-                        true);
+                        targetGroup.getGroupChatId());
 
         payments.forEach(payment -> {
 

@@ -7,10 +7,16 @@ import java.util.List;
 public interface PaymentService {
     void addPayment(Payment payment);
 
-    List<Payment> getPaymentsWithRecipient(String recipientUsername, Long groupChatId, boolean isConfirmed);
+    List<Payment> getConfirmedPaymentsWithRecipient(String recipientUsername, Long groupChatId);
 
-    List<Payment> getPaymentsWithPayer(String payerUsername, Long groupChatId, boolean isConfirmed);
+    List<Payment> getUnconfirmedPaymentsWithRecipient(String recipientUsername, Long groupChatId);
 
-    List<Payment> getPaymentsOfGroup(Long groupChatId, boolean isConfirmed);
+    List<Payment> getConfirmedPaymentsWithPayer(String payerUsername, Long groupChatId);
+
+    List<Payment> getUnconfirmedPaymentsWithPayer(String payerUsername, Long groupChatId);
+
+    List<Payment> getConfirmedPaymentsOfGroup(Long groupChatId);
+
+    List<Payment> getUnconfirmedPaymentsOfGroup(Long groupChatId);
 
 }

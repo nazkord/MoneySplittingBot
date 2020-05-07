@@ -44,13 +44,4 @@ public class PersonRepositoryTest {
         assertTrue(actualPerson.isPresent());
         assertEquals(expectedPerson, actualPerson.get());
     }
-
-    @Test
-    public void getPersonsOfGroup() {
-        // when
-        List<Person> personList = personRepository.getDistinctByGroupChatId(10L);
-
-        // then
-        assertEquals(3, personList.size());
-    }
 }
