@@ -45,13 +45,13 @@ public class BalanceServiceImpl implements BalanceService {
         // Fetching user and group
         try {
             targetPerson = personService.findPersonByUsername(username);
-        } catch (IllegalUsernameException e) {
+        } catch (PersonNotFoundException e) {
             e.printStackTrace();
             throw new PersonNotFoundException("No person with such username!");
         }
         try {
             targetGroup = groupService.findGroupById(groupChatId);
-        } catch (IllegalGroupChatIdException e) {
+        } catch (GroupNotFoundException e) {
             e.printStackTrace();
             throw new GroupNotFoundException("No group with such groupChatId!");
         }

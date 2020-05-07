@@ -1,7 +1,9 @@
 package com.dbteam.service.serviceImpl;
 
+import com.dbteam.exception.GroupNotFoundException;
 import com.dbteam.exception.IllegalGroupChatIdException;
 import com.dbteam.exception.IllegalUsernameException;
+import com.dbteam.exception.PersonNotFoundException;
 import com.dbteam.model.Group;
 import com.dbteam.model.Person;
 import com.dbteam.repository.GroupRepository;
@@ -35,17 +37,17 @@ public class GroupServiceImpl implements GroupService {
     }
 
     @Override
-    public Group findGroupById(Long groupChatId) throws IllegalGroupChatIdException {
+    public Group findGroupById(Long groupChatId) throws GroupNotFoundException {
         Optional<Group> optionalGroup = groupRepository.findGroupByGroupChatId(groupChatId);
-        return optionalGroup.orElseThrow(() -> new IllegalGroupChatIdException("There is no group in db with chat id: " + groupChatId));
+        return optionalGroup.orElseThrow(() -> new GroupNotFoundException("There is no group in db with chat id: " + groupChatId));
     }
 
     @Override
-    public void addUserToGroup(Long groupChatId, Person person) throws IllegalGroupChatIdException {
+    public void addUserToGroup(Long groupChatId, Person person) throws PersonNotFoundException, GroupNotFoundException {
         Group group = findGroupById(groupChatId);
         try {
             personService.findPersonByUsername(person.getUsername());
-        } catch (IllegalUsernameException e) {
+        } catch (PersonNotFoundException e) {
             personService.addPerson(person);
         } finally {
             group.getPeople().add(person);
@@ -54,7 +56,7 @@ public class GroupServiceImpl implements GroupService {
     }
 
     @Override
-    public Boolean isUserInGroup(Long groupChatId, String username) throws IllegalGroupChatIdException, IllegalUsernameException {
+    public Boolean isUserInGroup(Long groupChatId, String username) throws GroupNotFoundException, PersonNotFoundException {
         Group group = findGroupById(groupChatId);
         Person person = personService.findPersonByUsername(username);
         return group.getPeople().contains(person);
