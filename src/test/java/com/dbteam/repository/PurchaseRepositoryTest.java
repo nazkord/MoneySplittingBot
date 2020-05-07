@@ -27,12 +27,12 @@ public class PurchaseRepositoryTest {
 
     @BeforeAll
     public void setUp() {
-        Person person = new Person("Pronia", "Pronia", 1L, 2L, null);
-        actualRecipient = new Person("Jan", "Jan Kowalski", 1L, 2L, null);
+        Person person = new Person("Pronia", "Pronia", 1L, 2L, null, null);
+        actualRecipient = new Person("Jan", "Jan Kowalski", 1L, 2L, null, null);
         List<Person> recipients = List.of(person, actualRecipient);
-        Purchase purchase1 = new Purchase(1L, "Vasia", LocalDate.now().plusDays(3), "Lewik", 10L, "", recipients);
-        Purchase purchase2 = new Purchase(2L, "Vasia", LocalDate.now(), "Lidl", 20L, "", recipients);
-        Purchase purchase3 = new Purchase(3L, "Jan", LocalDate.now().minusDays(5), "Lewik", 30L, "",
+        Purchase purchase1 = new Purchase(1L, 5L,"Vasia", LocalDate.now().plusDays(3), "Lewik", 10D, "", recipients);
+        Purchase purchase2 = new Purchase(2L, 5L, "Vasia", LocalDate.now(), "Lidl", 20D, "", recipients);
+        Purchase purchase3 = new Purchase(3L, 5L, "Jan", LocalDate.now().minusDays(5), "Lewik", 30D, "",
                 Collections.singletonList(person));
         purchaseRepository.saveAll(List.of(purchase1, purchase2, purchase3));
     }
@@ -40,13 +40,13 @@ public class PurchaseRepositoryTest {
     @Test
     public void getPurchasesByBuyerUsername() {
         //when
-        List<Purchase> actualPurchases = purchaseRepository.getPurchasesByBuyerUsername("Vasia");
+        List<Purchase> actualPurchases = purchaseRepository.getPurchasesByBuyerAndGroupChatId("Vasia", 5L);
 
         //then
         assertEquals(2, actualPurchases.size());
-        Long actualAmount = actualPurchases
+        Double actualAmount = actualPurchases
                 .stream()
-                .mapToLong(Purchase::getAmount)
+                .mapToDouble(Purchase::getAmount)
                 .sum();
         assertEquals(30, actualAmount);
     }
@@ -54,7 +54,7 @@ public class PurchaseRepositoryTest {
     @Test
     public void getPurchasesByBuyerUsernameAndDateBetween() {
         //when
-        List<Purchase> actualPurchases = purchaseRepository.getPurchasesByBuyerUsernameAndDateBetween("Vasia",
+        List<Purchase> actualPurchases = purchaseRepository.getPurchasesByBuyerAndGroupChatIdAndDateBetween("Vasia", 5L,
                 LocalDate.now().plusDays(1), LocalDate.now().plusDays(5));
 
         //then
@@ -65,10 +65,19 @@ public class PurchaseRepositoryTest {
     @Test
     public void getPurchasesByRecipientsContains() {
         //when
-        List<Purchase> actualPurchases = purchaseRepository.getPurchasesByRecipientsContains(actualRecipient);
+        List<Purchase> actualPurchases = purchaseRepository.getPurchasesByRecipientsContainsAndGroupChatId(actualRecipient, 5L);
 
         //then
         assertEquals(2, actualPurchases.size());
-        actualPurchases.forEach(purchase -> assertEquals("Vasia", purchase.getBuyerUsername()));
+        actualPurchases.forEach(purchase -> assertEquals("Vasia", purchase.getBuyer()));
+    }
+
+    @Test
+    public void getPurchasesByRecipientsContainsAndNotFromGroup() {
+        //when
+        List<Purchase> actualPurchases = purchaseRepository.getPurchasesByRecipientsContainsAndGroupChatId(actualRecipient, 4L);
+
+        //then
+        assertEquals(0, actualPurchases.size());
     }
 }

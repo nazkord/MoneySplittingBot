@@ -15,10 +15,11 @@ public class Purchase {
 
     @Id
     Long purchaseId;
-    String buyerUsername;
+    Long groupChatId;
+    String buyer;
     LocalDate date;
     String title;
-    Long amount;
+    Double amount;
     String description;
     List<Person> recipients;
 }

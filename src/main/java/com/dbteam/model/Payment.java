@@ -12,8 +12,9 @@ public class Payment {
 
     @Id
     Long paymentId;
+    Long groupChatId;
     String payer;
-    Long amount;
+    Double amount;
     String recipient;
     Boolean isConfirmed;
 }
