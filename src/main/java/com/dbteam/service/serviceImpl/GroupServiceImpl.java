@@ -54,6 +54,7 @@ public class GroupServiceImpl implements GroupService {
             person.getGroupChatsStates().put(groupChatId, "INITIAL_STATE");
             personService.updatePerson(person);
             group.getPeople().add(person);
+            //TODO: add groupChatId to list of groupIds in person
             updateGroup(group);
         }
     }
