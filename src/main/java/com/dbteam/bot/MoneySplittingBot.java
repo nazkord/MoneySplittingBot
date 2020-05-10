@@ -6,6 +6,7 @@ import com.dbteam.model.Event;
 import com.dbteam.reply.handlers.callback.CallbackHandler;
 import com.dbteam.reply.handlers.callback.CallbackHandlerFactory;
 import com.dbteam.reply.handlers.event.EventHandlerFactory;
+import com.dbteam.model.Command;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.telegram.abilitybots.api.bot.AbilityBot;
@@ -42,6 +43,7 @@ public class MoneySplittingBot extends AbilityBot {
 
     public Reply BotAddedToGroupChatReply() {
         Consumer<Update> action = upd -> silent.execute(eventHandlerFactory.getHandler(Event.BOT_ADDED_TO_GROUP_CHAT).handleEvent(upd));
+
         Predicate<Update> condition = update -> {
             if (update.hasMessage() && update.getMessage().getNewChatMembers() != null) {
                 return update.getMessage().getNewChatMembers()
