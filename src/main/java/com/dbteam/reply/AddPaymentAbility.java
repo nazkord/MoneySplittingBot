@@ -1,7 +1,6 @@
-package com.dbteam.controller.abilities;
+package com.dbteam.reply;
 
 import org.telegram.abilitybots.api.bot.AbilityBot;
-import org.telegram.abilitybots.api.db.DBContext;
 import org.telegram.abilitybots.api.objects.Ability;
 import org.telegram.abilitybots.api.objects.Locality;
 import org.telegram.abilitybots.api.objects.Privacy;
