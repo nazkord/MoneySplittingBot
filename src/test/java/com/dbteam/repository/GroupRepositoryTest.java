@@ -23,7 +23,7 @@ public class GroupRepositoryTest {
     public void findGroupByGroupChatId(@Autowired GroupRepository groupRepository) {
         //given
         Person person = new Person("Pronia", "Pronia", 1L, 2L, null, null);
-        Group expectedGroup = new Group(1L, Collections.singletonList(person));
+        Group expectedGroup = new Group(1L,"Pronia's Group", Collections.singletonList(person));
         groupRepository.save(expectedGroup);
 
         //when

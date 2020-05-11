@@ -1,6 +1,5 @@
 package com.dbteam.service.serviceImpl;
 
-import com.dbteam.exception.IllegalUsernameException;
 import com.dbteam.exception.PersonNotFoundException;
 import com.dbteam.model.Person;
 import com.dbteam.repository.PersonRepository;
@@ -8,7 +7,6 @@ import com.dbteam.service.PersonService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -43,9 +41,21 @@ public class PersonServiceImpl implements PersonService {
     }
 
     @Override
-    public void updatePersonGroupChatState(String username, String newState) throws PersonNotFoundException {
+    public void updatePersonGroupChatState(String username, String newState, Long groupChatId) throws PersonNotFoundException {
         Person person = findPersonByUsername(username);
-        person.setGroupChatState(newState);
+        person.getGroupChatStates().put(groupChatId, newState);
         updatePerson(person);
+    }
+
+    @Override
+    public String getPersonBotChatState(String username) throws PersonNotFoundException {
+        Person person = findPersonByUsername(username);
+        return person.getBotChatState();
+    }
+
+    @Override
+    public String getPersonGroupChatState(String username, Long groupChatId) throws PersonNotFoundException {
+        Person person = findPersonByUsername(username);
+        return person.getGroupChatStates().get(groupChatId);
     }
 }

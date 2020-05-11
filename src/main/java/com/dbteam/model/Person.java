@@ -6,6 +6,8 @@ import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.util.Map;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -17,7 +19,7 @@ public class Person {
     String fullName;
     Long groupChatId;
     Long chatId;
-    String groupChatState;
+    Map<Long, String> groupChatStates;
     String botChatState;
 
     public void saveTo(Person person) {
@@ -27,5 +29,6 @@ public class Person {
         person.setChatId(this.chatId);
         person.setGroupChatId(this.groupChatId);
         person.setBotChatState(this.botChatState);
+        person.setGroupChatStates(this.groupChatStates);
     }
 } 

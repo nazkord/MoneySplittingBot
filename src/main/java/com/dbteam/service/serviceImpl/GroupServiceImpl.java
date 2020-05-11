@@ -1,15 +1,12 @@
 package com.dbteam.service.serviceImpl;
 
 import com.dbteam.exception.GroupNotFoundException;
-import com.dbteam.exception.IllegalGroupChatIdException;
-import com.dbteam.exception.IllegalUsernameException;
 import com.dbteam.exception.PersonNotFoundException;
 import com.dbteam.model.Group;
 import com.dbteam.model.Person;
 import com.dbteam.repository.GroupRepository;
 import com.dbteam.service.GroupService;
 import com.dbteam.service.PersonService;
-import com.google.inject.internal.cglib.core.$ObjectSwitchCallback;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
