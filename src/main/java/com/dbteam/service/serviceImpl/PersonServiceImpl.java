@@ -43,7 +43,7 @@ public class PersonServiceImpl implements PersonService {
     @Override
     public void updatePersonGroupChatState(String username, String newState, Long groupChatId) throws PersonNotFoundException {
         Person person = findPersonByUsername(username);
-        person.getGroupChatStates().put(groupChatId, newState);
+        person.getGroupChatsStates().put(groupChatId, newState);
         updatePerson(person);
     }
 
@@ -56,6 +56,6 @@ public class PersonServiceImpl implements PersonService {
     @Override
     public String getPersonGroupChatState(String username, Long groupChatId) throws PersonNotFoundException {
         Person person = findPersonByUsername(username);
-        return person.getGroupChatStates().get(groupChatId);
+        return person.getGroupChatsStates().get(groupChatId);
     }
 }

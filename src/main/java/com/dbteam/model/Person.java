@@ -19,7 +19,7 @@ public class Person {
     String fullName;
     Long groupChatId;
     Long chatId;
-    Map<Long, String> groupChatStates;
+    Map<Long, String> groupChatsStates;
     String botChatState;
 
     public void saveTo(Person person) {
@@ -29,6 +29,6 @@ public class Person {
         person.setChatId(this.chatId);
         person.setGroupChatId(this.groupChatId);
         person.setBotChatState(this.botChatState);
-        person.setGroupChatStates(this.groupChatStates);
+        person.setGroupChatsStates(this.groupChatsStates);
     }
 } 
