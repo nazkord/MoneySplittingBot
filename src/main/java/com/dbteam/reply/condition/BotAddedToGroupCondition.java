@@ -29,7 +29,7 @@ public class BotAddedToGroupCondition implements ReplyCondition {
     }
 
     @Override
-    public Event getCommand() {
+    public Event getEvent() {
         return Event.BOT_ADDED_TO_GROUP_CHAT;
     }
 }
