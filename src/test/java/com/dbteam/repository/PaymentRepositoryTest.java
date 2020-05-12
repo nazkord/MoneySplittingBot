@@ -1,7 +1,6 @@
 package com.dbteam.repository;
 
 import com.dbteam.model.Payment;
-import com.dbteam.model.Purchase;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
@@ -10,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -23,12 +23,13 @@ public class PaymentRepositoryTest {
 
     @BeforeAll()
     public void setUp() {
-        Payment payment1 = new Payment(1L,1L,"Vasia", 10D, "Pronia", true);
-        Payment payment2 = new Payment(2L,1L,"Pronia", 20D, "Vasia", false);
-        Payment payment3 = new Payment(3L,1L,"Vasia", 30D, "Pronia", false);
-        Payment payment4 = new Payment(4L,1L,"Pronia", 40D, "Vasia", true);
-        Payment payment5 = new Payment(5L,2L,"Vasia", 50D, "Pronia", true);
-        Payment payment6 = new Payment(6L,2L,"Pronia", 60D, "Vasia", false);
+
+        Payment payment1 = new Payment(1L,1L,LocalDate.of(2000, 12, 27),"Vasia", 10D, "Pronia", true);
+        Payment payment2 = new Payment(2L,1L,LocalDate.of(2010, 1, 1),"Pronia", 20D, "Vasia", false);
+        Payment payment3 = new Payment(3L,1L,LocalDate.of(2015, 12, 27),"Vasia", 30D, "Pronia", false);
+        Payment payment4 = new Payment(4L,1L,LocalDate.of(2017, 12, 27), "Pronia", 40D, "Vasia", true);
+        Payment payment5 = new Payment(5L,2L,LocalDate.of(2020, 12, 27), "Vasia", 50D, "Pronia", true);
+        Payment payment6 = new Payment(6L,2L,LocalDate.of(2090, 12, 27), "Pronia", 60D, "Vasia", false);
         paymentRepository.saveAll(List.of(payment1, payment2, payment3, payment4, payment5, payment6));
     }
 
@@ -92,4 +93,30 @@ public class PaymentRepositoryTest {
         assertEquals(2, payments.size());
         assertEquals(20D, payments.get(0).getAmount());
     }
+
+    @Test
+    public void getFirstPaymentWithUserBeforeAndAfter() {
+        // when
+        Payment payment = paymentRepository
+                .getPaymentByRecipientEqualsOrPayerEqualsAndDateBeforeOrderByDateDesc("Pronia",
+                        "Pronia",
+                        LocalDate.of(2090, 12, 27)).findFirst().orElse(null);
+
+        // then
+        assertEquals(2020, payment.getDate().getYear());
+        assertEquals(12, payment.getDate().getMonth().getValue());
+        assertEquals(27, payment.getDate().getDayOfMonth());
+
+        // when
+        payment = paymentRepository
+                .getPaymentByRecipientEqualsOrPayerEqualsAndDateAfterOrderByDateDesc("Pronia",
+                        "Pronia",
+                        payment.getDate()).findFirst().orElse(null);
+
+        //then
+        assertEquals(2090, payment.getDate().getYear());
+        assertEquals(12, payment.getDate().getMonth().getValue());
+        assertEquals(27, payment.getDate().getDayOfMonth());
+    }
+
 }

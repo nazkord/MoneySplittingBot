@@ -4,7 +4,10 @@ import com.dbteam.model.Payment;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Stream;
 
 @Repository
 public interface PaymentRepository extends MongoRepository<Payment, Long> {
@@ -13,12 +16,24 @@ public interface PaymentRepository extends MongoRepository<Payment, Long> {
     List<Payment> getPaymentsByPayerAndIsConfirmedIsTrueAndGroupChatId(String payerUsername, Long groupChatId);
     List<Payment> getPaymentsByPayerAndIsConfirmedIsFalseAndGroupChatId(String payerUsername, Long groupChatId);
     /**
-     * Get all confirmed payments of a specific group.
+     * Gets all confirmed payments of a specific group.
      */
     List<Payment> getPaymentsByGroupChatIdAndIsConfirmedIsTrue(Long groupChatId);
 
     /**
-     * Get all unconfirmed payments of a specific group
+     * Gets all unconfirmed payments of a specific group
      */
     List<Payment> getPaymentsByGroupChatIdAndIsConfirmedIsFalse(Long groupChatId);
+
+    /**
+     * Gets first payment before date with recipient or payer
+     */
+    Stream<Payment> getPaymentByRecipientEqualsOrPayerEqualsAndDateBeforeOrderByDateDesc(String recipientUsername, String payerUsername, LocalDate date);
+
+    /**
+     * Gets first payment after date with recipient or payer
+     */
+    Stream<Payment> getPaymentByRecipientEqualsOrPayerEqualsAndDateAfterOrderByDateDesc(String recipientUsername, String payerUsername, LocalDate date);
+
+
 }
