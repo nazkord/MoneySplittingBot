@@ -1,20 +1,19 @@
-package com.dbteam.reply.handlers.command;
+package com.dbteam.reply.handlers.callback;
 
 import com.dbteam.exception.GroupNotFoundException;
 import com.dbteam.exception.PersonNotFoundException;
-import com.dbteam.model.Command;
+import com.dbteam.model.Callback;
 import com.dbteam.model.Person;
 import com.dbteam.service.GroupService;
 import com.dbteam.service.PersonService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.telegram.telegrambots.meta.api.methods.AnswerCallbackQuery;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
-import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.User;
 
 @Service
-public class NewMemberInGroupHandler implements CommandHandler {
+public class NewMemberInGroupHandler implements CallbackHandler {
 
     private final GroupService groupService;
     private final PersonService personService;
@@ -25,7 +24,7 @@ public class NewMemberInGroupHandler implements CommandHandler {
     }
 
     @Override
-    public SendMessage handleCommand(Update update) {
+    public SendMessage sendMessage(Update update) {
 
         Long chatId = getChatId(update);
         SendMessage ms = new SendMessage().setChatId(chatId);
@@ -42,8 +41,16 @@ public class NewMemberInGroupHandler implements CommandHandler {
     }
 
     @Override
-    public Command commandToHandle() {
-        return Command.NEW_MEMBER_IN_GROUP;
+    public AnswerCallbackQuery handleCallback(Update update) {
+        AnswerCallbackQuery answer = new AnswerCallbackQuery();
+        answer.setText("You're in!");
+        answer.setCallbackQueryId(update.getCallbackQuery().getId());
+        return answer;
+    }
+
+    @Override
+    public Callback callbackToHandle() {
+        return Callback.NEW_MEMBER_IN_GROUP;
     }
 
     private Person getPersonFrom(Update update) {

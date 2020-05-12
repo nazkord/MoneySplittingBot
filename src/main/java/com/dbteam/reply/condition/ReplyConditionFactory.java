@@ -1,6 +1,6 @@
 package com.dbteam.reply.condition;
 
-import com.dbteam.model.Command;
+import com.dbteam.model.Event;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -14,7 +14,7 @@ import java.util.Map;
 public class ReplyConditionFactory {
 
     private final List<ReplyCondition> conditions;
-    private final Map<Command, ReplyCondition> conditionMap = new HashMap<>();
+    private final Map<Event, ReplyCondition> conditionMap = new HashMap<>();
 
     @PostConstruct
     private void fillHandlerMap() {
@@ -23,7 +23,7 @@ public class ReplyConditionFactory {
         }
     }
 
-    public ReplyCondition getCondition(Command cmd) {
+    public ReplyCondition getCondition(Event cmd) {
         return conditionMap.get(cmd);
     }
 }
