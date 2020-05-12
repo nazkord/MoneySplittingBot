@@ -1,18 +1,14 @@
-package com.dbteam.reply.handlers.callback;
+package com.dbteam.controller.reply.handlers.event;
 
 import com.dbteam.exception.NoCallbackQueryInUpdateException;
-import com.dbteam.model.Callback;
-import org.telegram.telegrambots.meta.api.methods.AnswerCallbackQuery;
+import com.dbteam.model.Event;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
-public interface CallbackHandler {
+public interface EventHandler {
+    SendMessage handleEvent(Update update);
 
-    AnswerCallbackQuery handleCallback(Update update);
-
-    Callback callbackToHandle();
-
-    SendMessage sendMessage(Update update);
+    Event eventToHandle();
 
     default Long getChatId(Update update) {
         return update.getCallbackQuery().getMessage().getChatId();
@@ -24,5 +20,4 @@ public interface CallbackHandler {
         }
         else throw new NoCallbackQueryInUpdateException("Update must have a callback query!");
     }
-
 }

@@ -1,4 +1,4 @@
-package com.dbteam.reply.condition;
+package com.dbteam.controller.condition;
 
 import com.dbteam.bot.BotConfiguration;
 import com.dbteam.model.Event;

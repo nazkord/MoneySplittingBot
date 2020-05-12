@@ -11,6 +11,7 @@ import org.telegram.telegrambots.meta.api.methods.AnswerCallbackQuery;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.User;
+import java.util.HashMap;
 
 @Service
 public class NewMemberInGroupHandler implements CallbackHandler {
@@ -57,8 +58,7 @@ public class NewMemberInGroupHandler implements CallbackHandler {
         User user = update.getCallbackQuery().getFrom();
         return new Person(user.getUserName(),
                 user.getFirstName() + " " + user.getLastName(),
-                getChatId(update), null,
-                null, null);
+                getChatId(update), new HashMap<>(),
+                null);
     }
-
 }

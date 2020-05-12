@@ -1,8 +1,6 @@
 package com.dbteam.service.serviceImpl;
 
 import com.dbteam.exception.GroupNotFoundException;
-import com.dbteam.exception.IllegalGroupChatIdException;
-import com.dbteam.exception.IllegalUsernameException;
 import com.dbteam.exception.PersonNotFoundException;
 import com.dbteam.model.Group;
 import com.dbteam.model.Payment;
@@ -19,23 +17,23 @@ import java.util.Map;
 @Service
 public class BalanceServiceImpl implements BalanceService {
 
-    @Autowired
-    private PurchaseService purchaseService;
-
-    @Autowired
-    private PaymentService paymentService;
-
-    @Autowired
-    private PersonService personService;
-
-    @Autowired
-    private GroupService groupService;
+    private final PurchaseService purchaseService;
+    private final PaymentService paymentService;
+    private final PersonService personService;
+    private final GroupService groupService;
 
     private Map<String, Double> balanceMap;
 
     private Person targetPerson;
 
     private Group targetGroup;
+
+    public BalanceServiceImpl(PurchaseService purchaseService, PaymentService paymentService, PersonService personService, GroupService groupService) {
+        this.purchaseService = purchaseService;
+        this.paymentService = paymentService;
+        this.personService = personService;
+        this.groupService = groupService;
+    }
 
     @Override
     public Map<String, Double> getBalanceMap(String username, Long groupChatId)

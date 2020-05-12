@@ -1,23 +1,22 @@
 package com.dbteam.bot;
 
-import com.dbteam.ability.CommandHandler;
-import com.dbteam.ability.CommandHandlerFactory;
+
+import com.dbteam.controller.ability.CommandHandler;
+import com.dbteam.controller.ability.CommandHandlerFactory;
 import com.dbteam.model.Callback;
 import com.dbteam.model.CallbackData;
 import com.dbteam.model.Command;
 import com.dbteam.model.Event;
-import com.dbteam.reply.handlers.callback.CallbackHandler;
-import com.dbteam.reply.handlers.callback.CallbackHandlerFactory;
-import com.dbteam.reply.handlers.event.EventHandlerFactory;
+import com.dbteam.controller.reply.handlers.callback.CallbackHandler;
+import com.dbteam.controller.reply.handlers.callback.CallbackHandlerFactory;
+import com.dbteam.controller.reply.handlers.event.EventHandlerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.telegram.abilitybots.api.bot.AbilityBot;
 import org.telegram.abilitybots.api.objects.Ability;
 import org.telegram.abilitybots.api.objects.MessageContext;
-import org.telegram.abilitybots.api.objects.Privacy;
 import org.telegram.abilitybots.api.objects.Reply;
 import org.telegram.telegrambots.meta.api.objects.Update;
-import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 import java.util.function.Consumer;
 import java.util.function.Predicate;
@@ -97,6 +96,29 @@ public class MoneySplittingBot extends AbilityBot {
         return builder.build();
 
     }
+
+    public Ability CheckPaymentsAbility() {
+
+        Consumer<MessageContext> consumer = ctx -> {
+            CommandHandler handler = commandHandlerFactory.getHandler(Command.CHECK_PAYMENTS);
+            silent.execute(handler.primaryAction(ctx.update()));
+        };
+
+        Ability.AbilityBuilder builder = Ability.builder()
+                .name("checkpayments")
+                .privacy(PUBLIC)
+                .locality(USER)
+                .input(0)
+                .info("Check you incoming and sent payments")
+                .action(consumer);
+
+        return builder.build();
+
+    }
+
+
+
+
 
 
 }

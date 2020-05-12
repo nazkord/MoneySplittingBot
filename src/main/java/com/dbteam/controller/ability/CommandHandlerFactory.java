@@ -1,8 +1,6 @@
-package com.dbteam.ability;
+package com.dbteam.controller.ability;
 
-import com.dbteam.model.Callback;
 import com.dbteam.model.Command;
-import com.dbteam.reply.handlers.callback.CallbackHandler;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 

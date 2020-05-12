@@ -10,6 +10,7 @@ import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.util.Collections;
+import java.util.Map;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -22,8 +23,8 @@ public class GroupRepositoryTest {
     @Test
     public void findGroupByGroupChatId(@Autowired GroupRepository groupRepository) {
         //given
-        Person person = new Person("Pronia", "Pronia", 1L, 2L, null, null);
-        Group expectedGroup = new Group(1L, Collections.singletonList(person));
+        Person person = new Person("Pronia", "Pronia", 2L, Map.of(1L, ""), null);
+        Group expectedGroup = new Group(1L,"Pronia's Group", Collections.singletonList(person));
         groupRepository.save(expectedGroup);
 
         //when

@@ -1,10 +1,7 @@
 package com.dbteam.service;
 
-import com.dbteam.exception.IllegalUsernameException;
 import com.dbteam.exception.PersonNotFoundException;
 import com.dbteam.model.Person;
-
-import java.util.List;
 
 public interface PersonService {
     void addPerson(Person person);
@@ -15,6 +12,10 @@ public interface PersonService {
 
     void updatePersonBotChatState(String username, String newState) throws PersonNotFoundException;
 
-    void updatePersonGroupChatState(String username, String newState) throws PersonNotFoundException;
+    void updatePersonGroupChatState(String username, String newState, Long groupChatId) throws PersonNotFoundException;
+
+    String getPersonBotChatState(String username) throws PersonNotFoundException;
+
+    String getPersonGroupChatState(String username, Long groupChatId) throws PersonNotFoundException;
 
 }
