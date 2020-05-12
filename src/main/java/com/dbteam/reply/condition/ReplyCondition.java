@@ -8,5 +8,5 @@ import java.util.function.Predicate;
 public interface ReplyCondition {
 
     Predicate<Update> handleUpdate();
-    Event getCommand();
+    Event getEvent();
 }

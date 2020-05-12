@@ -19,7 +19,7 @@ public class ReplyConditionFactory {
     @PostConstruct
     private void fillHandlerMap() {
         for (ReplyCondition replyCondition : conditions) {
-            conditionMap.put(replyCondition.getCommand(), replyCondition);
+            conditionMap.put(replyCondition.getEvent(), replyCondition);
         }
     }
 
