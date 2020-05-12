@@ -1,5 +1,4 @@
 package com.dbteam.reply.condition;
-
 import com.dbteam.model.Event;
 import org.telegram.telegrambots.meta.api.objects.Update;
 

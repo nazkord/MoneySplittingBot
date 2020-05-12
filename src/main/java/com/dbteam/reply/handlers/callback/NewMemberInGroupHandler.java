@@ -1,4 +1,4 @@
-package com.dbteam.reply.handlers.callback;
+package com.dbteam.controller.reply.handlers.callback;
 
 import com.dbteam.exception.GroupNotFoundException;
 import com.dbteam.exception.PersonNotFoundException;

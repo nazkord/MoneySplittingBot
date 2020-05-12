@@ -7,7 +7,9 @@ import lombok.Getter;
 @AllArgsConstructor
 public enum Command {
 
-    START("start");
+    START("start"),
+
+    CHECK_PAYMENTS("checkPayments");
 
     String value;
 }
