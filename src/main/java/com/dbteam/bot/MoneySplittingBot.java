@@ -1,7 +1,10 @@
 package com.dbteam.bot;
 
+import com.dbteam.ability.CommandHandler;
+import com.dbteam.ability.CommandHandlerFactory;
 import com.dbteam.model.Callback;
 import com.dbteam.model.CallbackData;
+import com.dbteam.model.Command;
 import com.dbteam.model.Event;
 import com.dbteam.reply.handlers.callback.CallbackHandler;
 import com.dbteam.reply.handlers.callback.CallbackHandlerFactory;
@@ -9,11 +12,18 @@ import com.dbteam.reply.handlers.event.EventHandlerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.telegram.abilitybots.api.bot.AbilityBot;
+import org.telegram.abilitybots.api.objects.Ability;
+import org.telegram.abilitybots.api.objects.MessageContext;
+import org.telegram.abilitybots.api.objects.Privacy;
 import org.telegram.abilitybots.api.objects.Reply;
 import org.telegram.telegrambots.meta.api.objects.Update;
+import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 import java.util.function.Consumer;
 import java.util.function.Predicate;
+
+import static org.telegram.abilitybots.api.objects.Locality.USER;
+import static org.telegram.abilitybots.api.objects.Privacy.PUBLIC;
 
 @Component
 public class MoneySplittingBot extends AbilityBot {
@@ -24,15 +34,18 @@ public class MoneySplittingBot extends AbilityBot {
     private final BotConfiguration botConfiguration;
     private final EventHandlerFactory eventHandlerFactory;
     private final CallbackHandlerFactory callbackHandlerFactory;
+    private final CommandHandlerFactory commandHandlerFactory;
 
     public MoneySplittingBot(
             BotConfiguration botConfiguration,
             EventHandlerFactory eventHandlerFactory,
-            CallbackHandlerFactory callbackHandlerFactory) {
+            CallbackHandlerFactory callbackHandlerFactory,
+            CommandHandlerFactory commandHandlerFactory) {
         super(botConfiguration.getBotToken(), botConfiguration.getBotName());
         this.botConfiguration = botConfiguration;
         this.eventHandlerFactory = eventHandlerFactory;
         this.callbackHandlerFactory = callbackHandlerFactory;
+        this.commandHandlerFactory = commandHandlerFactory;
     }
 
     @Override
@@ -66,4 +79,25 @@ public class MoneySplittingBot extends AbilityBot {
     private Predicate<Update> callbackDataEquals(String data) {
         return update -> update.hasCallbackQuery() && update.getCallbackQuery().getData().equals(data);
     }
+
+    public Ability StartAbility() {
+
+        Consumer<MessageContext> consumer = ctx -> {
+            CommandHandler handler = commandHandlerFactory.getHandler(Command.START);
+            silent.execute(handler.primaryAction(ctx.update()));
+        };
+
+        Ability.AbilityBuilder builder = Ability.builder()
+                .name("start")
+                .privacy(PUBLIC)
+                .locality(USER)
+                .input(0)
+                .info("I am MoneySplittingBot!")
+                .action(consumer);
+
+        return builder.build();
+
+    }
+
+
 }
