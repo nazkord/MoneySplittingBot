@@ -15,11 +15,13 @@ import java.util.Optional;
 @Service
 public class GroupServiceImpl implements GroupService {
 
-    @Autowired
-    private GroupRepository groupRepository;
+    private final GroupRepository groupRepository;
+    private final PersonService personService;
 
-    @Autowired
-    private PersonService personService;
+    public GroupServiceImpl(GroupRepository groupRepository, PersonService personService) {
+        this.groupRepository = groupRepository;
+        this.personService = personService;
+    }
 
     @Override
     public void addGroup(Group group) {
@@ -40,13 +42,17 @@ public class GroupServiceImpl implements GroupService {
     }
 
     @Override
-    public void addUserToGroup(Long groupChatId, Person person) throws PersonNotFoundException, GroupNotFoundException {
+    public void addUserToGroup(Long groupChatId, Person person) throws GroupNotFoundException {
         Group group = findGroupById(groupChatId);
         try {
-            personService.findPersonByUsername(person.getUsername());
+            person = personService.findPersonByUsername(person.getUsername());
         } catch (PersonNotFoundException e) {
             personService.addPerson(person);
         } finally {
+            //TODO: add some initial state for the group
+            //TODO: maybe it's better to move this line to PersonService
+            person.getGroupChatsStates().put(groupChatId, "INITIAL_STATE");
+            personService.updatePerson(person);
             group.getPeople().add(person);
             updateGroup(group);
         }

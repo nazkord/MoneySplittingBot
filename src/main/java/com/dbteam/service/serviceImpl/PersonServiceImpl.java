@@ -12,8 +12,11 @@ import java.util.Optional;
 @Service
 public class PersonServiceImpl implements PersonService {
 
-    @Autowired
-    private PersonRepository personRepository;
+    private final PersonRepository personRepository;
+
+    public PersonServiceImpl(PersonRepository personRepository) {
+        this.personRepository = personRepository;
+    }
 
     @Override
     public void addPerson(Person person) {
@@ -49,13 +52,11 @@ public class PersonServiceImpl implements PersonService {
 
     @Override
     public String getPersonBotChatState(String username) throws PersonNotFoundException {
-        Person person = findPersonByUsername(username);
-        return person.getBotChatState();
+        return findPersonByUsername(username).getBotChatState();
     }
 
     @Override
     public String getPersonGroupChatState(String username, Long groupChatId) throws PersonNotFoundException {
-        Person person = findPersonByUsername(username);
-        return person.getGroupChatsStates().get(groupChatId);
+        return findPersonByUsername(username).getGroupChatsStates().get(groupChatId);
     }
 }
