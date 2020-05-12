@@ -16,11 +16,13 @@ public class Group {
 
     @Id
     Long groupChatId;
+    String groupTitle;
     List<Person> people;
 
     public void saveTo(Group group) {
         group.setGroupChatId(this.groupChatId);
         group.setPeople(this.people);
+        group.setGroupTitle(groupTitle);
     }
 
 }

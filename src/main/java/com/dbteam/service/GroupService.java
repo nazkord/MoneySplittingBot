@@ -1,8 +1,6 @@
 package com.dbteam.service;
 
 import com.dbteam.exception.GroupNotFoundException;
-import com.dbteam.exception.IllegalGroupChatIdException;
-import com.dbteam.exception.IllegalUsernameException;
 import com.dbteam.exception.PersonNotFoundException;
 import com.dbteam.model.Group;
 import com.dbteam.model.Person;
