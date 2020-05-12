@@ -1,4 +1,4 @@
-package com.dbteam.controller.reply.condition;
+package com.dbteam.controller.condition;
 
 import com.dbteam.model.Event;
 import lombok.RequiredArgsConstructor;
