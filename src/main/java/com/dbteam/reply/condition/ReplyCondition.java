@@ -1,6 +1,6 @@
 package com.dbteam.reply.condition;
 
-import com.dbteam.model.Command;
+import com.dbteam.model.Event;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
 import java.util.function.Predicate;
@@ -8,5 +8,5 @@ import java.util.function.Predicate;
 public interface ReplyCondition {
 
     Predicate<Update> handleUpdate();
-    Command getCommand();
+    Event getCommand();
 }

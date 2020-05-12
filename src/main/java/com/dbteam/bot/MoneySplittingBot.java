@@ -1,7 +1,11 @@
 package com.dbteam.bot;
 
-import com.dbteam.model.Command;
-import com.dbteam.reply.handlers.command.CommandHandlerFactory;
+import com.dbteam.model.Callback;
+import com.dbteam.model.CallbackData;
+import com.dbteam.model.Event;
+import com.dbteam.reply.handlers.callback.CallbackHandler;
+import com.dbteam.reply.handlers.callback.CallbackHandlerFactory;
+import com.dbteam.reply.handlers.event.EventHandlerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.telegram.abilitybots.api.bot.AbilityBot;
@@ -18,14 +22,17 @@ public class MoneySplittingBot extends AbilityBot {
     private int creatorId;
 
     private final BotConfiguration botConfiguration;
-    private final CommandHandlerFactory commandHandlerFactory;
+    private final EventHandlerFactory eventHandlerFactory;
+    private final CallbackHandlerFactory callbackHandlerFactory;
 
     public MoneySplittingBot(
             BotConfiguration botConfiguration,
-            CommandHandlerFactory commandHandlerFactory) {
+            EventHandlerFactory eventHandlerFactory,
+            CallbackHandlerFactory callbackHandlerFactory) {
         super(botConfiguration.getBotToken(), botConfiguration.getBotName());
         this.botConfiguration = botConfiguration;
-        this.commandHandlerFactory = commandHandlerFactory;
+        this.eventHandlerFactory = eventHandlerFactory;
+        this.callbackHandlerFactory = callbackHandlerFactory;
     }
 
     @Override
@@ -33,8 +40,8 @@ public class MoneySplittingBot extends AbilityBot {
         return creatorId;
     }
 
-    public Reply BotAddedToGroupReply() {
-        Consumer<Update> action = upd -> silent.execute(commandHandlerFactory.getHandler(Command.BOT_ADDED_TO_GROUP).handleCommand(upd));
+    public Reply BotAddedToGroupChatReply() {
+        Consumer<Update> action = upd -> silent.execute(eventHandlerFactory.getHandler(Event.BOT_ADDED_TO_GROUP_CHAT).handleEvent(upd));
         Predicate<Update> condition = update -> {
             if (update.hasMessage() && update.getMessage().getNewChatMembers() != null) {
                 return update.getMessage().getNewChatMembers()
@@ -48,9 +55,11 @@ public class MoneySplittingBot extends AbilityBot {
 
     public Reply NewGroupMemberReply() {
         Consumer<Update> action = upd -> {
-            silent.execute(commandHandlerFactory.getHandler(Command.NEW_MEMBER_IN_GROUP).handleCommand(upd));
+            CallbackHandler handler = callbackHandlerFactory.getHandler(Callback.NEW_MEMBER_IN_GROUP);
+            silent.execute(handler.sendMessage(upd));
+            silent.execute(handler.handleCallback(upd));
         };
-        return Reply.of(action, callbackDataEquals(Command.CALLBACK_DATA_BOT_ADDED_TO_GROUP.getValue()));
+        return Reply.of(action, callbackDataEquals(CallbackData.ADD_USER_TO_GROUP.getValue()));
     }
 
     private Predicate<Update> callbackDataEquals(String data) {
