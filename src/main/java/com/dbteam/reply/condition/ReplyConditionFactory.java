@@ -24,7 +24,6 @@ public class ReplyConditionFactory {
     }
 
     public ReplyCondition getCondition(Event cmd) {
-
         return conditionMap.get(cmd);
     }
 }
