@@ -1,4 +1,4 @@
-package com.dbteam.reply;
+package com.dbteam.ability;
 
 import org.telegram.abilitybots.api.bot.AbilityBot;
 import org.telegram.abilitybots.api.objects.Ability;
