@@ -1,8 +1,7 @@
 package com.dbteam.reply.condition;
 
 import com.dbteam.bot.BotConfiguration;
-import com.dbteam.model.Command;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.dbteam.model.Event;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
@@ -30,7 +29,7 @@ public class BotAddedToGroupCondition implements ReplyCondition {
     }
 
     @Override
-    public Command getCommand() {
-        return Command.BOT_ADDED_TO_GROUP;
+    public Event getCommand() {
+        return Event.BOT_ADDED_TO_GROUP_CHAT;
     }
 }

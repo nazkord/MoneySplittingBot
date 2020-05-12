@@ -1,6 +1,7 @@
-package com.dbteam.reply.handlers.command;
+package com.dbteam.reply.handlers.event;
 
-import com.dbteam.model.Command;
+import com.dbteam.model.CallbackData;
+import com.dbteam.model.Event;
 import com.dbteam.model.Group;
 import com.dbteam.service.GroupService;
 import org.springframework.stereotype.Service;
@@ -13,29 +14,29 @@ import java.util.Collections;
 import java.util.List;
 
 @Service
-public class BotAddedToGroupHandler implements CommandHandler {
+public class BotAddedToGroupChatHandler implements EventHandler {
 
     private static final String MESSAGE_GREETING =
-            "Hello, thanks for adding me to your group.\n" +
-                    "I won't let you down!\n\n" +
-                    "Please, click the button below to join\n" +
+            "Hello, thanks for adding me to your group. " +
+                    "I won't let you down! " +
+                    "Please, click the button below to join " +
                     "group expenses management.";
 
     private final GroupService groupService;
 
-    public BotAddedToGroupHandler(GroupService groupService) {
+    public BotAddedToGroupChatHandler(GroupService groupService) {
         this.groupService = groupService;
     }
 
     @Override
-    public SendMessage handleCommand(Update update) {
+    public SendMessage handleEvent(Update update) {
 
         groupService.addGroup(new Group(update.getMessage().getChatId(), Collections.emptyList()));
 
         InlineKeyboardButton button = new InlineKeyboardButton();
         button
                 .setText("I am in!")
-                .setCallbackData(Command.CALLBACK_DATA_BOT_ADDED_TO_GROUP.getValue());
+                .setCallbackData(CallbackData.ADD_USER_TO_GROUP.getValue());
 
         InlineKeyboardMarkup markup = new InlineKeyboardMarkup();
         markup.setKeyboard(List.of(List.of(button)));
@@ -47,7 +48,7 @@ public class BotAddedToGroupHandler implements CommandHandler {
     }
 
     @Override
-    public Command commandToHandle() {
-        return Command.BOT_ADDED_TO_GROUP;
+    public Event eventToHandle() {
+        return Event.BOT_ADDED_TO_GROUP_CHAT;
     }
 }
