@@ -30,7 +30,6 @@ public class BotAddedToGroupChatHandler implements EventHandler {
 
     @Override
     public SendMessage handleEvent(Update update) {
-
         groupService.addGroup(new Group(update.getMessage().getChatId(), update.getMessage().getChat().getTitle(),Collections.emptyList()));
 
         InlineKeyboardButton button = new InlineKeyboardButton();
