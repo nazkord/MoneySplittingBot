@@ -96,25 +96,30 @@ public class PaymentRepositoryTest {
 
     @Test
     public void getFirstPaymentWithUserBeforeAndAfter() {
+
         // when
         Payment payment = paymentRepository
-                .getPaymentByRecipientEqualsOrPayerEqualsAndDateBeforeOrderByDateDesc("Pronia",
-                        "Pronia",
-                        LocalDate.of(2090, 12, 27)).findFirst().orElse(null);
-
-        // then
-        assertEquals(2020, payment.getDate().getYear());
-        assertEquals(12, payment.getDate().getMonth().getValue());
-        assertEquals(27, payment.getDate().getDayOfMonth());
-
-        // when
-        payment = paymentRepository
-                .getPaymentByRecipientEqualsOrPayerEqualsAndDateAfterOrderByDateDesc("Pronia",
-                        "Pronia",
-                        payment.getDate()).findFirst().orElse(null);
+                .getFirstByRecipientEqualsOrPayerEqualsAndDateAfterOrderByDateDesc("Pronia",
+                        "Pronia", LocalDate.of(2020, 12, 27)).orElse(null);
 
         //then
+        assert payment != null;
         assertEquals(2090, payment.getDate().getYear());
+        assertEquals(12, payment.getDate().getMonth().getValue());
+        assertEquals(27, payment.getDate().getDayOfMonth());
+    }
+
+    @Test
+    public void getFirstByRecipientEqualsOrPayerEqualsAndDateBeforeOrderByDateDesc () {
+        // when
+        Payment payment = paymentRepository
+                .getFirstByRecipientEqualsOrPayerEqualsAndDateBeforeOrderByDateDesc("Pronia",
+                        "Pronia",
+                        LocalDate.of(2090, 12, 27)).orElse(null);
+
+        // then
+        assert payment != null;
+        assertEquals(2020, payment.getDate().getYear());
         assertEquals(12, payment.getDate().getMonth().getValue());
         assertEquals(27, payment.getDate().getDayOfMonth());
     }

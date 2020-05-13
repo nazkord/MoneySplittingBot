@@ -26,14 +26,13 @@ public interface PaymentRepository extends MongoRepository<Payment, Long> {
     List<Payment> getPaymentsByGroupChatIdAndIsConfirmedIsFalse(Long groupChatId);
 
     /**
-     * Gets stream of payments sorted desc before date
+     * Gets first payment before date with such payer or receiver
      */
-    Stream<Payment> getPaymentByRecipientEqualsOrPayerEqualsAndDateBeforeOrderByDateDesc(String recipientUsername, String payerUsername, LocalDate date);
+    Optional<Payment> getFirstByRecipientEqualsOrPayerEqualsAndDateBeforeOrderByDateDesc(String recipientUsername, String payerUsername, LocalDate date);
 
     /**
-     * Gets stream of payments sorted desc after date
+     * Gets first payment after date with such payer or receiver
      */
-    Stream<Payment> getPaymentByRecipientEqualsOrPayerEqualsAndDateAfterOrderByDateDesc(String recipientUsername, String payerUsername, LocalDate date);
-
+    Optional<Payment> getFirstByRecipientEqualsOrPayerEqualsAndDateAfterOrderByDateDesc(String recipientUsername, String payerUsername, LocalDate date);
 
 }

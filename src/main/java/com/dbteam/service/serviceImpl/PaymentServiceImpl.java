@@ -1,5 +1,6 @@
 package com.dbteam.service.serviceImpl;
 
+import com.dbteam.exception.PaymentNotFoundException;
 import com.dbteam.model.Payment;
 import com.dbteam.repository.PaymentRepository;
 import com.dbteam.service.PaymentService;
@@ -70,18 +71,17 @@ public class PaymentServiceImpl implements PaymentService {
     }
 
     @Override
-    public Payment getFirstPaymentWithUserBefore(LocalDate date, String username) {
-        Optional<Payment> payment = paymentRepository
-                .getPaymentByRecipientEqualsOrPayerEqualsAndDateBeforeOrderByDateDesc(
-                        username, username, date).findFirst();
-        return payment.orElse(null);
+    public Payment getFirstPaymentWithUserBefore(LocalDate date, String username) throws PaymentNotFoundException {
+        return paymentRepository
+                .getFirstByRecipientEqualsOrPayerEqualsAndDateBeforeOrderByDateDesc(
+                        username, username, date).orElseThrow(new PaymentNotFoundException());
+
     }
 
     @Override
-    public Payment getFirstPaymentWithUserAfter(LocalDate date, String username) {
-        Optional<Payment> payment = paymentRepository
-                .getPaymentByRecipientEqualsOrPayerEqualsAndDateAfterOrderByDateDesc(
-                        username, username, date).findFirst();
-        return payment.orElse(null);
+    public Payment getFirstPaymentWithUserAfter(LocalDate date, String username) throws PaymentNotFoundException {
+        return paymentRepository
+                .getFirstByRecipientEqualsOrPayerEqualsAndDateAfterOrderByDateDesc(
+                        username, username, date).orElseThrow(new PaymentNotFoundException());
     }
 }
