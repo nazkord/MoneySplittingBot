@@ -1,7 +1,9 @@
 package com.dbteam.service;
 
+import com.dbteam.exception.PaymentNotFoundException;
 import com.dbteam.model.Payment;
 
+import java.time.LocalDate;
 import java.util.List;
 
 public interface PaymentService {
@@ -18,5 +20,9 @@ public interface PaymentService {
     List<Payment> getConfirmedPaymentsOfGroup(Long groupChatId);
 
     List<Payment> getUnconfirmedPaymentsOfGroup(Long groupChatId);
+
+    Payment getFirstPaymentWithUserBefore(LocalDate date, String username) throws PaymentNotFoundException;
+
+    Payment getFirstPaymentWithUserAfter(LocalDate date, String username) throws PaymentNotFoundException;
 
 }

@@ -1,13 +1,14 @@
 package com.dbteam.service.serviceImpl;
 
+import com.dbteam.exception.PaymentNotFoundException;
 import com.dbteam.model.Payment;
 import com.dbteam.repository.PaymentRepository;
-import com.dbteam.repository.PersonRepository;
 import com.dbteam.service.PaymentService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class PaymentServiceImpl implements PaymentService {
@@ -67,5 +68,20 @@ public class PaymentServiceImpl implements PaymentService {
     public List<Payment> getUnconfirmedPaymentsOfGroup(Long groupChatId) {
         return paymentRepository
                 .getPaymentsByGroupChatIdAndIsConfirmedIsFalse(groupChatId);
+    }
+
+    @Override
+    public Payment getFirstPaymentWithUserBefore(LocalDate date, String username) throws PaymentNotFoundException {
+        return paymentRepository
+                .getFirstByRecipientEqualsOrPayerEqualsAndDateBeforeOrderByDateDesc(
+                        username, username, date).orElseThrow(new PaymentNotFoundException());
+
+    }
+
+    @Override
+    public Payment getFirstPaymentWithUserAfter(LocalDate date, String username) throws PaymentNotFoundException {
+        return paymentRepository
+                .getFirstByRecipientEqualsOrPayerEqualsAndDateAfterOrderByDateDesc(
+                        username, username, date).orElseThrow(new PaymentNotFoundException());
     }
 }

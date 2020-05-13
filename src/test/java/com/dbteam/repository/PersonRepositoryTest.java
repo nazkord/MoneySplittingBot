@@ -31,9 +31,9 @@ public class PersonRepositoryTest {
         groupChatStates.put(11L, "saying_bye");
 
 
-        Person N = new Person("okok", "Nazarczyk", 10L, 2L, groupChatStates, null);
-        Person K = new Person("kubakhj", "Kubus", 10L, 3L, null, null);
-        Person J = new Person("jan", "Jasiek", 10L, 4L, null, null);
+        Person N = new Person("okok", "Nazarczyk", 10L, groupChatStates, null);
+        Person K = new Person("kubakhj", "Kubus", 10L, null, null);
+        Person J = new Person("jan", "Jasiek", 10L, null, null);
 
         personRepository.saveAll(List.of(N, K, J));
     }
@@ -41,7 +41,7 @@ public class PersonRepositoryTest {
     @Test
     void findUserByUsername() {
         //given
-        Person expectedPerson = new Person("Vasia", "Vasia Pupkin", 1L,2L, null, null);
+        Person expectedPerson = new Person("Vasia", "Vasia Pupkin", 1L,null, null);
         personRepository.save(expectedPerson);
 
         //when

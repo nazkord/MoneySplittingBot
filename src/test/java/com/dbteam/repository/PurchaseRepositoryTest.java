@@ -27,8 +27,8 @@ public class PurchaseRepositoryTest {
 
     @BeforeAll
     public void setUp() {
-        Person person = new Person("Pronia", "Pronia", 1L, 2L, null, null);
-        actualRecipient = new Person("Jan", "Jan Kowalski", 1L, 2L, null, null);
+        Person person = new Person("Pronia", "Pronia", 1L, null, null);
+        actualRecipient = new Person("Jan", "Jan Kowalski", 1L, null, null);
         List<Person> recipients = List.of(person, actualRecipient);
         Purchase purchase1 = new Purchase(1L, 5L,"Vasia", LocalDate.now().plusDays(3), "Lewik", 10D, "", recipients);
         Purchase purchase2 = new Purchase(2L, 5L, "Vasia", LocalDate.now(), "Lidl", 20D, "", recipients);
