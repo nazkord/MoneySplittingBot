@@ -17,26 +17,9 @@ public class StateServiceImpl implements StateService {
     }
 
     @Override
-    public boolean updateFitsBotChatState(Update update, String expectedState) {
-        String username;
-        if (update.hasMessage())
-            username = update.getMessage().getFrom().getUserName();
-        else if (update.hasCallbackQuery())
-            username = update.getCallbackQuery().getMessage().getFrom().getUserName();
-        else
-            return false;
-
-        Person person;
-
-        try {
-            person = personService.findPersonByUsername(username);
-        } catch (PersonNotFoundException e) {
-            e.printStackTrace();
-            return false;
-        }
-
+    public boolean userHasSuchBotChatState(String username, String expectedState) throws PersonNotFoundException {
+        Person person = personService.findPersonByUsername(username);
         return person.getBotChatState().equals(expectedState);
-
     }
 
     @Override
@@ -54,5 +37,11 @@ public class StateServiceImpl implements StateService {
         }
 
         return builder.toString();
+    }
+
+    @Override
+    public String getBotChatStateOfUser(String username) throws PersonNotFoundException {
+        Person person = personService.findPersonByUsername(username);
+        return person.getBotChatState();
     }
 }
