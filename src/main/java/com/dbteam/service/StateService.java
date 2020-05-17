@@ -19,9 +19,9 @@ import org.telegram.telegrambots.meta.api.objects.Update;
  */
 public interface StateService {
 
-    boolean userHasSuchBotChatState (String username, String expectedState) throws PersonNotFoundException;
+    boolean usersBotChatStateStartsWith(String username, String expectedState) throws PersonNotFoundException;
 
-    String buildBotChatState(String command, String groupChatId, String... optional);
+    String buildBotChatState(String command, String... optional);
 
     String getBotChatStateOfUser(String username) throws PersonNotFoundException;
 }

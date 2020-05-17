@@ -9,6 +9,8 @@ import java.util.List;
 public interface PaymentService {
     void addPayment(Payment payment);
 
+    void updatePayment(Payment payment);
+
     List<Payment> getConfirmedPaymentsWithRecipient(String recipientUsername, Long groupChatId);
 
     List<Payment> getUnconfirmedPaymentsWithRecipient(String recipientUsername, Long groupChatId);
@@ -29,4 +31,5 @@ public interface PaymentService {
 
     Payment getFirstPaymentWithUserAfter(Long paymentId, String username) throws PaymentNotFoundException;
 
+    Payment getPaymentById(Long paymentId) throws PaymentNotFoundException;
 }

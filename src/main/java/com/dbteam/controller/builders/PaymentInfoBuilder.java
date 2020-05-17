@@ -1,17 +1,17 @@
 package com.dbteam.controller.builders;
 
-public interface PaymentInfoBuilder {
+public interface IPaymentInfoBuilder {
 
     void reset();
 
-    PaymentInfoBuilder setGroupTitle(String groupTitle);
+    IPaymentInfoBuilder setGroupTitle(String groupTitle);
 
-    PaymentInfoBuilder setFrom(String username);
+    IPaymentInfoBuilder setFrom(String username);
 
-    PaymentInfoBuilder setTo(String username);
+    IPaymentInfoBuilder setTo(String username);
 
-    PaymentInfoBuilder setAmount(Double amount);
+    IPaymentInfoBuilder setAmount(Double amount);
 
-    PaymentInfoBuilder setConfirmed(Boolean confirmed);
+    IPaymentInfoBuilder setConfirmed(Boolean confirmed);
 
 }

@@ -25,6 +25,11 @@ public class PaymentServiceImpl implements PaymentService {
     }
 
     @Override
+    public void updatePayment(Payment payment) {
+        paymentRepository.save(payment);
+    }
+
+    @Override
     public List<Payment> getConfirmedPaymentsWithRecipient(String recipientUsername, Long groupChatId) {
         return paymentRepository
                 .getPaymentsByRecipientAndIsConfirmedIsTrueAndGroupChatId(
@@ -99,5 +104,11 @@ public class PaymentServiceImpl implements PaymentService {
                 .findFirstByPaymentId(paymentId).orElseThrow(new PaymentNotFoundException());
 
         return getFirstPaymentWithUserAfter(payment.getDate(), username);
+    }
+
+    @Override
+    public Payment getPaymentById(Long paymentId) throws PaymentNotFoundException {
+        return paymentRepository.findFirstByPaymentId(paymentId)
+                .orElseThrow(new PaymentNotFoundException());
     }
 }

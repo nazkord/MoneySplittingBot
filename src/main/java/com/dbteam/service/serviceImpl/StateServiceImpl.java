@@ -17,18 +17,15 @@ public class StateServiceImpl implements StateService {
     }
 
     @Override
-    public boolean userHasSuchBotChatState(String username, String expectedState) throws PersonNotFoundException {
+    public boolean usersBotChatStateStartsWith(String username, String expectedState) throws PersonNotFoundException {
         Person person = personService.findPersonByUsername(username);
-        return person.getBotChatState().equals(expectedState);
+        return person.getBotChatState().startsWith(expectedState);
     }
 
     @Override
-    public String buildBotChatState(String command, String groupChatId, String... optional) {
+    public String buildBotChatState(String command, String... optional) {
         StringBuilder builder = new StringBuilder();
-        builder
-                .append(command)
-                .append("/")
-                .append(groupChatId);
+        builder.append(command);
 
         for (String o: optional) {
             builder

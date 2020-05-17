@@ -10,6 +10,7 @@ import com.dbteam.service.PersonService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.Optional;
 
 @Service
@@ -51,6 +52,7 @@ public class GroupServiceImpl implements GroupService {
         } finally {
             //TODO: add some initial state for the group
             //TODO: maybe it's better to move this line to PersonService
+            if (person.getGroupChatsStates() == null) person.setGroupChatsStates(new HashMap<>());
             person.getGroupChatsStates().put(groupChatId, "INITIAL_STATE");
             personService.updatePerson(person);
             group.getPeople().add(person);

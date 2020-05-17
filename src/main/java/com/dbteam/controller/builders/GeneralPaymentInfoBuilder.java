@@ -1,6 +1,8 @@
 package com.dbteam.controller.builders;
 
-public class IncomingPaymentInfoBuilder implements PaymentInfoBuilder {
+import com.dbteam.model.Payment;
+
+public class PaymentInfoBuilder implements IPaymentInfoBuilder {
 
     private StringBuilder builder = new StringBuilder();
 
@@ -14,37 +16,48 @@ public class IncomingPaymentInfoBuilder implements PaymentInfoBuilder {
 
     private Boolean confirmed;
 
+    public static String of(Payment payment, String groupTitle) {
+        PaymentInfoBuilder builder = new PaymentInfoBuilder();
+        builder
+                .setGroupTitle(groupTitle)
+                .setFrom(payment.getPayer())
+                .setTo(payment.getRecipient())
+                .setAmount(payment.getAmount())
+                .setConfirmed(payment.getIsConfirmed());
+        return builder.build();
+    }
+
     @Override
     public void reset() {
         builder = new StringBuilder();
     }
 
     @Override
-    public PaymentInfoBuilder setGroupTitle(String groupTitle) {
+    public IPaymentInfoBuilder setGroupTitle(String groupTitle) {
         this.groupTitle = groupTitle;
         return this;
     }
 
     @Override
-    public PaymentInfoBuilder setFrom(String username) {
+    public IPaymentInfoBuilder setFrom(String username) {
         this.fromUsername = username;
         return this;
     }
 
     @Override
-    public PaymentInfoBuilder setTo(String username) {
+    public IPaymentInfoBuilder setTo(String username) {
         this.toUsername = username;
         return this;
     }
 
     @Override
-    public PaymentInfoBuilder setAmount(Double amount) {
+    public IPaymentInfoBuilder setAmount(Double amount) {
         this.amount = amount;
         return this;
     }
 
     @Override
-    public PaymentInfoBuilder setConfirmed(Boolean confirmed) {
+    public IPaymentInfoBuilder setConfirmed(Boolean confirmed) {
         this.confirmed = confirmed;
         return this;
     }
