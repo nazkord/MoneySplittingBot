@@ -2,7 +2,7 @@ package com.dbteam.controller.builders;
 
 import com.dbteam.model.Payment;
 
-public class PaymentInfoBuilder implements IPaymentInfoBuilder {
+public class GeneralPaymentInfoBuilder implements PaymentInfoBuilder {
 
     private StringBuilder builder = new StringBuilder();
 
@@ -17,7 +17,7 @@ public class PaymentInfoBuilder implements IPaymentInfoBuilder {
     private Boolean confirmed;
 
     public static String of(Payment payment, String groupTitle) {
-        PaymentInfoBuilder builder = new PaymentInfoBuilder();
+        GeneralPaymentInfoBuilder builder = new GeneralPaymentInfoBuilder();
         builder
                 .setGroupTitle(groupTitle)
                 .setFrom(payment.getPayer())
@@ -33,31 +33,31 @@ public class PaymentInfoBuilder implements IPaymentInfoBuilder {
     }
 
     @Override
-    public IPaymentInfoBuilder setGroupTitle(String groupTitle) {
+    public PaymentInfoBuilder setGroupTitle(String groupTitle) {
         this.groupTitle = groupTitle;
         return this;
     }
 
     @Override
-    public IPaymentInfoBuilder setFrom(String username) {
+    public PaymentInfoBuilder setFrom(String username) {
         this.fromUsername = username;
         return this;
     }
 
     @Override
-    public IPaymentInfoBuilder setTo(String username) {
+    public PaymentInfoBuilder setTo(String username) {
         this.toUsername = username;
         return this;
     }
 
     @Override
-    public IPaymentInfoBuilder setAmount(Double amount) {
+    public PaymentInfoBuilder setAmount(Double amount) {
         this.amount = amount;
         return this;
     }
 
     @Override
-    public IPaymentInfoBuilder setConfirmed(Boolean confirmed) {
+    public PaymentInfoBuilder setConfirmed(Boolean confirmed) {
         this.confirmed = confirmed;
         return this;
     }

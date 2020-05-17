@@ -13,7 +13,7 @@ import java.util.List;
  */
 public interface CommandHandler {
 
-    SendMessage primaryAction(Update update);
+    List<BotApiMethod<?>> primaryAction(Update update);
 
     List<BotApiMethod<?>> secondaryAction(Update update);
 

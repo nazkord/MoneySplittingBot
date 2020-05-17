@@ -6,6 +6,6 @@ public interface MarkupBuilder {
 
     void reset();
 
-    MarkupBuilder setButton(int row, int col, String text, CallbackData data);
+    MarkupBuilder setButton(int row, int col, String text, String callbackData);
 
 }

@@ -32,7 +32,7 @@ public class StartHandler implements CommandHandler{
     }
 
     @Override
-    public SendMessage primaryAction(Update update) {
+    public List<BotApiMethod<?>> primaryAction(Update update) {
         StringBuilder reply = new StringBuilder();
         reply.append(MSG_START);
         Person person;
@@ -62,7 +62,7 @@ public class StartHandler implements CommandHandler{
         person.setChatId(update.getMessage().getChatId());
         personService.addPerson(person);
 
-        return message;
+        return List.of(message);
     }
 
     private String getUsername(Update update) {

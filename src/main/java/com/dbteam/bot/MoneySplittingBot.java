@@ -5,12 +5,14 @@ import com.dbteam.controller.ability.CommandHandlerFactory;
 import com.dbteam.controller.reply.handlers.callback.CallbackHandlerFactory;
 import com.dbteam.controller.reply.handlers.event.EventHandlerFactory;
 
+import com.dbteam.exception.PersonNotFoundException;
 import com.dbteam.model.Callback;
 import com.dbteam.model.CallbackData;
 import com.dbteam.model.Command;
 import com.dbteam.model.Event;
 import com.dbteam.controller.reply.handlers.callback.CallbackHandler;
 
+import com.dbteam.service.StateService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.telegram.abilitybots.api.bot.AbilityBot;
@@ -35,18 +37,21 @@ public class MoneySplittingBot extends AbilityBot {
     private final EventHandlerFactory eventHandlerFactory;
     private final CallbackHandlerFactory callbackHandlerFactory;
     private final CommandHandlerFactory commandHandlerFactory;
+    private final StateService stateService;
 
     public MoneySplittingBot(
             BotConfiguration botConfiguration,
 
             EventHandlerFactory eventHandlerFactory,
             CallbackHandlerFactory callbackHandlerFactory,
-            CommandHandlerFactory commandHandlerFactory) {
+            CommandHandlerFactory commandHandlerFactory,
+            StateService stateService) {
         super(botConfiguration.getBotToken(), botConfiguration.getBotName());
         this.botConfiguration = botConfiguration;
         this.eventHandlerFactory = eventHandlerFactory;
         this.callbackHandlerFactory = callbackHandlerFactory;
         this.commandHandlerFactory = commandHandlerFactory;
+        this.stateService = stateService;
     }
 
     @Override
@@ -81,10 +86,10 @@ public class MoneySplittingBot extends AbilityBot {
     }
 
     public Ability StartAbility() {
-
         Consumer<MessageContext> consumer = ctx -> {
             CommandHandler handler = commandHandlerFactory.getHandler(Command.START);
-            silent.execute(handler.primaryAction(ctx.update()));
+            handler.primaryAction(ctx.update())
+                .forEach(silent::execute);
         };
 
         Ability.AbilityBuilder builder = Ability.builder()
@@ -101,9 +106,31 @@ public class MoneySplittingBot extends AbilityBot {
 
     public Ability CheckPaymentsAbility() {
 
-        Consumer<MessageContext> consumer = ctx -> {
+        Consumer<MessageContext> primaryConsumer = ctx -> {
             CommandHandler handler = commandHandlerFactory.getHandler(Command.CHECK_PAYMENTS);
-            silent.execute(handler.primaryAction(ctx.update()));
+            handler.primaryAction(ctx.update())
+                    .forEach(silent::execute);
+        };
+
+        Consumer<Update> secondaryConsumer = upd -> {
+            CommandHandler handler = commandHandlerFactory.getHandler(Command.CHECK_PAYMENTS);
+            handler.secondaryAction(upd)
+                    .forEach(silent::execute);
+        };
+
+        Predicate<Update> condition = upd -> {
+            if (upd.hasCallbackQuery() && upd.getCallbackQuery().getMessage().getChat().isUserChat()) {
+                try {
+                    return stateService
+                            .usersBotChatStateStartsWith(
+                                    upd.getCallbackQuery().getMessage().getFrom().getUserName(),
+                                    "checkpayments");
+                } catch (PersonNotFoundException e) {
+                    e.printStackTrace();
+                    return false;
+                }
+            }
+            return false;
         };
 
         Ability.AbilityBuilder builder = Ability.builder()
@@ -112,7 +139,8 @@ public class MoneySplittingBot extends AbilityBot {
                 .locality(USER)
                 .input(0)
                 .info("Check you incoming and sent payments")
-                .action(consumer);
+                .action(primaryConsumer)
+                .reply(secondaryConsumer, condition);
 
         return builder.build();
 

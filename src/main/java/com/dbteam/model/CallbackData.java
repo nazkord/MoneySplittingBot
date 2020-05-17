@@ -15,30 +15,30 @@ public enum CallbackData {
     ADD_USER_TO_GROUP("addUserToGroup"),
 
     /**
-     * This data is used in /checkpayments command to choose incoming payments
+     * This data is used as a prefix for callback data
+     * to specify group when using /chackpayments command
      */
-    CHECK_INCOMING_PAYMENTS("checkIncomingPayments"),
-
-    /**
-     * This data is used in /checkpayments command to sent payments
-     */
-    CHECK_SENT_PAYMENTS("checkIncomingPayments"),
+    CHOOSE_GROUP("group/"),
 
     /**
      * todo
      */
-    CONFIRM_PAYMENT("confirmPayment"),
+    TOGGLE_CONFIRMATION("confirmPayment"),
 
     /**
      * todo
      */
-    UNCONFIRM_PAYMENT("unconfirmPayment"),
+    LOAD_OLDER_PAYMENT("loadOlderPayment"),
 
     /**
      * todo
      */
-    LOAD_MORE_PAYMENTS("loadMorePayments");
+    LOAD_NEWER_PAYMENT("loadNewerPayment"),
 
+    /**
+     * todo
+     */
+    LOAD_PREVIOUS_PAYMENT("loadPreviousPayment");
     String value;
 
 }
