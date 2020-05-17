@@ -84,4 +84,20 @@ public class PaymentServiceImpl implements PaymentService {
                 .getFirstByRecipientEqualsOrPayerEqualsAndDateAfterOrderByDateDesc(
                         username, username, date).orElseThrow(new PaymentNotFoundException());
     }
+
+    @Override
+    public Payment getFirstPaymentWithUserBefore(Long paymentId, String username) throws PaymentNotFoundException {
+        Payment payment = paymentRepository
+                .findFirstByPaymentId(paymentId).orElseThrow(new PaymentNotFoundException());
+
+        return getFirstPaymentWithUserBefore(payment.getDate(), username);
+    }
+
+    @Override
+    public Payment getFirstPaymentWithUserAfter(Long paymentId, String username) throws PaymentNotFoundException {
+        Payment payment = paymentRepository
+                .findFirstByPaymentId(paymentId).orElseThrow(new PaymentNotFoundException());
+
+        return getFirstPaymentWithUserAfter(payment.getDate(), username);
+    }
 }

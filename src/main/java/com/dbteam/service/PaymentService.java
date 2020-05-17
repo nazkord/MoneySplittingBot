@@ -25,4 +25,8 @@ public interface PaymentService {
 
     Payment getFirstPaymentWithUserAfter(LocalDate date, String username) throws PaymentNotFoundException;
 
+    Payment getFirstPaymentWithUserBefore(Long paymentId, String username) throws PaymentNotFoundException;
+
+    Payment getFirstPaymentWithUserAfter(Long paymentId, String username) throws PaymentNotFoundException;
+
 }
