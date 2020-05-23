@@ -38,7 +38,19 @@ public enum CallbackData {
     /**
      * todo
      */
-    LOAD_PREVIOUS_PAYMENT("loadPreviousPayment");
+    LOAD_PREVIOUS_PAYMENT("loadPreviousPayment"),
+
+    /**
+     * todo
+     */
+    CHECK_BALANCE_OF_ONE_USER("checkBalanceOfOneUser"),
+
+    /**
+     * todo
+     */
+    CHECK_BALANCE_OF_ALL_USERS("checkBalanceOfAllUsers");
+
+
     String value;
 
 }
