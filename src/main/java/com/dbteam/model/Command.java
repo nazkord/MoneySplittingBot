@@ -9,7 +9,9 @@ public enum Command {
 
     START("start"),
 
-    CHECK_PAYMENTS("checkPayments");
+    CHECK_PAYMENTS("checkPayments"),
+
+    CHECK_BALANCE("checkBalance");
 
     String value;
 }
