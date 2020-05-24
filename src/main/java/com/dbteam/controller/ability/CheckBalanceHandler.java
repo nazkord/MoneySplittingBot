@@ -66,12 +66,6 @@ public class CheckBalanceHandler implements CommandHandler {
         return apiMethods;
     }
 
-    private String getUsername(Update update) {
-        if (update.hasCallbackQuery())
-            return update.getCallbackQuery().getFrom().getUserName();
-        return update.getMessage().getFrom().getUserName();
-    }
-
     private Long getChatId(Update update) {
         if (update.hasCallbackQuery())
             return update.getCallbackQuery().getMessage().getChatId();

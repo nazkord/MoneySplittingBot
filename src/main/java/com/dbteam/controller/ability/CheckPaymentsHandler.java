@@ -11,7 +11,6 @@ import com.dbteam.service.GroupService;
 import com.dbteam.service.PaymentService;
 import com.dbteam.service.PersonService;
 import com.dbteam.service.StateService;
-import lombok.SneakyThrows;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
@@ -23,7 +22,6 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMa
 
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 @Service
@@ -153,7 +151,7 @@ public class CheckPaymentsHandler implements CommandHandler {
             apiMethods.add(sendMessage);
             return apiMethods;
         }
-        Long currentPaymentId = Long.valueOf(getCallbackDataPostfix(callbackQuery.getData()));
+        Long currentPaymentId = Long.valueOf(getDataPostfix(callbackQuery.getData()));
         currentUpdate = update;
         try {
             currentPayment = paymentService.getPaymentById(currentPaymentId);
@@ -182,10 +180,6 @@ public class CheckPaymentsHandler implements CommandHandler {
                 return callbackData;
         }
         throw new NoSuchCallbackDataException();
-    }
-
-    private String getCallbackDataPostfix(String data) {
-        return data.split("/")[1];
     }
 
     private List<BotApiMethod<?>> loadPreviousPayment() {
@@ -293,12 +287,6 @@ public class CheckPaymentsHandler implements CommandHandler {
 
     private String getPaymentIdPart(Payment payment) {
         return "/" + payment.getPaymentId();
-    }
-
-    private String getUsername(Update update) {
-        if (update.hasCallbackQuery())
-            return update.getCallbackQuery().getFrom().getUserName();
-        return update.getMessage().getFrom().getUserName();
     }
 
     @Override

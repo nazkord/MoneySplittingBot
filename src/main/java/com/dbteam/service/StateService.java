@@ -1,6 +1,7 @@
 package com.dbteam.service;
 
 import com.dbteam.exception.PersonNotFoundException;
+import com.dbteam.repository.PersonRepository;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
 /**
@@ -19,9 +20,12 @@ import org.telegram.telegrambots.meta.api.objects.Update;
  */
 public interface StateService {
 
-    boolean usersBotChatStateStartsWith(String username, String expectedState) throws PersonNotFoundException;
+    boolean isUserBotChatStateStartsWith(String username, String expectedState) throws PersonNotFoundException;
 
     String buildBotChatState(String command, String... optional);
 
-    String getBotChatStateOfUser(String username) throws PersonNotFoundException;
+    String getUserBotChatState(String username) throws PersonNotFoundException;
+
+    String getUserGroupChatState(String username, Long groupChatId) throws PersonNotFoundException;
+
 }

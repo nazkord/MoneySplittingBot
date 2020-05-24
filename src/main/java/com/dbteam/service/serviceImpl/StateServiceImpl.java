@@ -17,7 +17,7 @@ public class StateServiceImpl implements StateService {
     }
 
     @Override
-    public boolean usersBotChatStateStartsWith(String username, String expectedState) throws PersonNotFoundException {
+    public boolean isUserBotChatStateStartsWith(String username, String expectedState) throws PersonNotFoundException {
         Person person = personService.findPersonByUsername(username);
         return person.getBotChatState().startsWith(expectedState);
     }
@@ -37,8 +37,14 @@ public class StateServiceImpl implements StateService {
     }
 
     @Override
-    public String getBotChatStateOfUser(String username) throws PersonNotFoundException {
+    public String getUserBotChatState(String username) throws PersonNotFoundException {
         Person person = personService.findPersonByUsername(username);
         return person.getBotChatState();
+    }
+
+    @Override
+    public String getUserGroupChatState(String username, Long groupChatId) throws PersonNotFoundException {
+        Person person = personService.findPersonByUsername(username);
+        return person.getGroupChatsStates().get(groupChatId);
     }
 }

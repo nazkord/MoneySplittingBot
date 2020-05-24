@@ -18,4 +18,14 @@ public interface CommandHandler {
     List<BotApiMethod<?>> secondaryAction(Update update);
 
     Command commandToHandle();
+
+    default String getUsername(Update update) {
+        if (update.hasCallbackQuery())
+            return update.getCallbackQuery().getFrom().getUserName();
+        return update.getMessage().getFrom().getUserName();
+    }
+
+    default String getDataPostfix(String data) {
+        return data.split("/")[1];
+    }
 }
