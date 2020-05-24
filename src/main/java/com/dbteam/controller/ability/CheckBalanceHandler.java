@@ -37,7 +37,7 @@ public class CheckBalanceHandler implements CommandHandler {
 
     private Person currentPerson;
     private Long chatId;
-    
+
     public CheckBalanceHandler(BalanceService balanceService,
                                PersonService personService) {
         this.balanceService = balanceService;
@@ -46,11 +46,21 @@ public class CheckBalanceHandler implements CommandHandler {
 
     @Override
     public List<BotApiMethod<?>> primaryAction(Update update) {
+        setCurrentUserAndChatId(update);
+
         List<BotApiMethod<?>> apiMethods = new ArrayList<>();
 
         SendMessage message = new SendMessage();
         message.setText(MSG_PRIMARY);
+        message.setChatId(chatId);
+        apiMethods.add(message);
 
+        apiMethods.add(displayChoice(chatId));
+
+        return apiMethods;
+    }
+
+    private void setCurrentUserAndChatId(Update update){
         try {
             currentPerson = personService.findPersonByUsername(getUsername(update));
         } catch (PersonNotFoundException e) {
@@ -59,11 +69,6 @@ public class CheckBalanceHandler implements CommandHandler {
 
         chatId = getChatId(update);
         assert chatId != null;
-        message.setChatId(chatId);
-        apiMethods.add(message);
-        apiMethods.add(displayChoice(chatId));
-
-        return apiMethods;
     }
 
     private String getUsername(Update update) {
@@ -100,6 +105,7 @@ public class CheckBalanceHandler implements CommandHandler {
 
     @Override
     public List<BotApiMethod<?>> secondaryAction(Update update){
+        setCurrentUserAndChatId(update);
 
         List<BotApiMethod<?>> apiMethods = new ArrayList<>();
 
