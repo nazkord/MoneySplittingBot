@@ -12,43 +12,43 @@ public enum CallbackData {
      * This data is used when <b>group chat</b> member
      * wants to be added to <b>group expenses management</b>.
      */
-    ADD_USER_TO_GROUP("addUserToGroup"),
+    ADD_USER_TO_GROUP("ADD_USER_TO_GROUP"),
 
     /**
      * This data is used as a prefix for callback data
      * to specify group when using /chackpayments command
      */
-    CHOOSE_GROUP("group/"),
+    CHOOSE_GROUP("CHOOSE_GROUP"),
 
     /**
-     * todo
+     * To change confirmation state of a payment
      */
-    TOGGLE_CONFIRMATION("confirmPayment"),
+    TOGGLE_CONFIRMATION("TOGGLE_CONFIRMATION"),
 
     /**
-     * todo
+     * To load older payment, refers to /checkpayments command
      */
-    LOAD_OLDER_PAYMENT("loadOlderPayment"),
+    LOAD_OLDER_PAYMENT("LOAD_OLDER_PAYMENT"),
 
     /**
-     * todo
+     * To load newer payment, refers to /checkpayments command
      */
-    LOAD_NEWER_PAYMENT("loadNewerPayment"),
+    LOAD_NEWER_PAYMENT("LOAD_NEWER_PAYMENT"),
 
     /**
-     * todo
+     * To load previous payment, refers to /checkpayments command
      */
-    LOAD_PREVIOUS_PAYMENT("loadPreviousPayment"),
+    LOAD_PREVIOUS_PAYMENT("LOAD_PREVIOUS_PAYMENT"),
 
     /**
-     * todo
+     * /checkbalance command
      */
-    CHECK_BALANCE_OF_ONE_USER("checkBalanceOfOneUser"),
+    CHECK_BALANCE_OF_ONE_USER("CHECK_BALANCE_OF_ONE_USER"),
 
     /**
-     * todo
+     * /checkbalance command
      */
-    CHECK_BALANCE_OF_ALL_USERS("checkBalanceOfAllUsers");
+    CHECK_BALANCE_OF_ALL_USERS("CHECK_BALANCE_OF_ALL_USERS");
 
 
     String value;

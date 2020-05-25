@@ -19,15 +19,13 @@ import java.util.Map;
 public class StartHandler implements CommandHandler{
 
     private static final String MSG_START =
-            "Hello! I am MoneySplittingBot. I can remember all your group expenses.";
+            "Hello! I am MoneySplittingBot. I can remember all your group expenses. ";
     private static final String MSG_NO_GROUPS =
             "Add me to your group chat and I will show you what I can!";
 
-    private final GroupService groupService;
     private final PersonService personService;
 
-    public StartHandler(GroupService groupService, PersonService personService) {
-        this.groupService = groupService;
+    public StartHandler(PersonService personService) {
         this.personService = personService;
     }
 

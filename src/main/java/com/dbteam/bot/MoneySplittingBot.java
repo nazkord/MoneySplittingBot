@@ -165,8 +165,8 @@ public class MoneySplittingBot extends AbilityBot {
                 try {
                     return stateService
                             .isUserBotChatStateStartsWith(
-                                    upd.getCallbackQuery().getMessage().getFrom().getUserName(),
-                                    "checkpayments");
+                                    upd.getCallbackQuery().getFrom().getUserName(),
+                                    Command.CHECK_PAYMENTS.getValue().toLowerCase());
                 } catch (PersonNotFoundException e) {
                     e.printStackTrace();
                     return false;
@@ -204,8 +204,8 @@ public class MoneySplittingBot extends AbilityBot {
             if (upd.hasCallbackQuery() && upd.getCallbackQuery().getMessage().getChat().isUserChat()) {
                 try {
                     return stateService
-                            .usersBotChatStateStartsWith(
-                                    upd.getCallbackQuery().getMessage().getFrom().getUserName(),
+                            .isUserBotChatStateStartsWith(
+                                    upd.getCallbackQuery().getFrom().getUserName(),
                                     "checkbalance");
                 } catch (PersonNotFoundException e) {
                     e.printStackTrace();

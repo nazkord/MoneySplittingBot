@@ -1,6 +1,5 @@
 package com.dbteam.controller.builders;
 
-import com.dbteam.model.CallbackData;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 
@@ -18,14 +17,14 @@ public class InlineKeyboardMarkupBuilder implements MarkupBuilder {
 
     @Override
     public MarkupBuilder setButton(int row, int col, String text, String callbackData) {
-        if (buttons.get(row) == null) {
-            buttons.add(row, new ArrayList<>());
+        if (buttons.size() < row+1) {
+            for (int i=0; i<=row; i++) {
+                buttons.add(i, new ArrayList<>());
+            }
         }
         InlineKeyboardButton button = new InlineKeyboardButton();
-        button
-                .setText(text)
-                .setCallbackData(callbackData);
-
+        button.setText(text);
+        button.setCallbackData(callbackData);
         buttons.get(row).add(col, button);
         return this;
     }
