@@ -79,15 +79,21 @@ public class PaymentServiceImpl implements PaymentService {
         List<Payment> list = paymentRepository
                 .getByRecipientEqualsOrPayerEqualsAndDateLessThanOrderByDateDesc(
                         username, username, date);
-        return list.get(0);
+        for (Payment payment: list) {
+            if (payment.getDate().isBefore(date)) return payment;
+        }
+        return null;
     }
 
     @Override
     public Payment getFirstPaymentWithUserAfter(LocalDateTime date, String username) throws PaymentNotFoundException {
         List<Payment> list = paymentRepository
-                .getByRecipientEqualsOrPayerEqualsAndDateGreaterThanOrderByDateDesc(
+                .getByRecipientEqualsOrPayerEqualsAndDateGreaterThanOrderByDateAsc(
                         username, username, date);
-        return list.get(0);
+        for (Payment payment: list) {
+            if (payment.getDate().isAfter(date)) return payment;
+        }
+        return null;
     }
 
     @Override

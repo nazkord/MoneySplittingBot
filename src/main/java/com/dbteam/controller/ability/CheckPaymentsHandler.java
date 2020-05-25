@@ -258,17 +258,23 @@ public class CheckPaymentsHandler implements CommandHandler {
 
     private List<BotApiMethod<?>> buildKeyboardWithOneButton(String buttonLabel) {
         List<BotApiMethod<?>> apiMethods = new ArrayList<>();
-        SendMessage message = new SendMessage(
-                currentPerson.getChatId(),
-                MSG_NO_PAYMENTS
-        );
+        EditMessageText editText = new EditMessageText();
+        editText.setChatId(currentPerson.getChatId());
+        editText.setMessageId(currentUpdate.getCallbackQuery().getMessage().getMessageId());
+
         InlineKeyboardMarkupBuilder builder = new InlineKeyboardMarkupBuilder();
         builder.setButton(0, 0,
                 buttonLabel,
                 CallbackData.LOAD_PREVIOUS_PAYMENT.getValue() +
                         getPaymentIdPart(currentPayment));
-        message.setReplyMarkup(builder.build());
-        apiMethods.add(message);
+        EditMessageReplyMarkup editMarkup = new EditMessageReplyMarkup();
+        editMarkup.setReplyMarkup(builder.build());
+        editMarkup.setChatId(currentPerson.getChatId());
+        editMarkup.setInlineMessageId(currentUpdate.getCallbackQuery().getInlineMessageId());
+        editMarkup.setMessageId(currentUpdate.getCallbackQuery().getMessage().getMessageId());
+
+        apiMethods.add(editText);
+        apiMethods.add(editMarkup);
         return apiMethods;
     }
 

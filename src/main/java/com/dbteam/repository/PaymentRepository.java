@@ -35,7 +35,7 @@ public interface PaymentRepository extends MongoRepository<Payment, Long> {
     /**
      * Gets first payment after date with such payer or receiver
      */
-    List<Payment> getByRecipientEqualsOrPayerEqualsAndDateGreaterThanOrderByDateDesc(String recipientUsername, String payerUsername, LocalDateTime date);
+    List<Payment> getByRecipientEqualsOrPayerEqualsAndDateGreaterThanOrderByDateAsc(String recipientUsername, String payerUsername, LocalDateTime date);
 
     /**
      * Gets payment with payment id.

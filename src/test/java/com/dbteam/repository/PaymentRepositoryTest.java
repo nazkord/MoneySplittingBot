@@ -99,7 +99,7 @@ public class PaymentRepositoryTest {
 
         // when
         Payment payment = paymentRepository
-                .getByRecipientEqualsOrPayerEqualsAndDateGreaterThanOrderByDateDesc("Pronia",
+                .getByRecipientEqualsOrPayerEqualsAndDateGreaterThanOrderByDateAsc("Pronia",
                         "Pronia", LocalDateTime.of(2020, 12, 27, 0 ,0)).get(0);
 
         //then
@@ -202,7 +202,7 @@ public class PaymentRepositoryTest {
 
         // when
         Payment payment = paymentRepository
-                .getByRecipientEqualsOrPayerEqualsAndDateGreaterThanOrderByDateDesc(
+                .getByRecipientEqualsOrPayerEqualsAndDateGreaterThanOrderByDateAsc(
                         "kuba",
                         "kuba",
                         payment1.getDate()).get(1);
