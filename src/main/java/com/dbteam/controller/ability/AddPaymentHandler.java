@@ -3,10 +3,7 @@ package com.dbteam.controller.ability;
 import com.dbteam.exception.PersonNotFoundException;
 import com.dbteam.model.Command;
 import com.dbteam.model.Payment;
-import com.dbteam.service.GroupService;
-import com.dbteam.service.PaymentService;
-import com.dbteam.service.PersonService;
-import com.dbteam.service.StateService;
+import com.dbteam.service.*;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
@@ -36,12 +33,14 @@ public class AddPaymentHandler implements CommandHandler {
     private final StateService stateService;
     private final PaymentService paymentService;
     private final GroupService groupService;
+    private final SequenceGeneratorService sequenceGeneratorService;
 
-    public AddPaymentHandler(PersonService personService, StateService stateService, GroupService groupService, PaymentService paymentService) {
+    public AddPaymentHandler(PersonService personService, StateService stateService, GroupService groupService, PaymentService paymentService, SequenceGeneratorService sequenceGeneratorService) {
         this.personService = personService;
         this.stateService = stateService;
         this.groupService = groupService;
         this.paymentService = paymentService;
+        this.sequenceGeneratorService = sequenceGeneratorService;
     }
 
     @Override
@@ -74,25 +73,22 @@ public class AddPaymentHandler implements CommandHandler {
         SendMessage message = new SendMessage();
         message.setChatId(update.getMessage().getChatId());
         String wholeState;
-        String recipientUsername = ""; //TODO: change it
-        double amount = 0; //TODO: change it too
+        String recipientUsername;
+        double amount;
 
         try {
             wholeState = stateService.getUserGroupChatState(getUsername(update), update.getMessage().getChatId());
         } catch (PersonNotFoundException e) {
-            e.printStackTrace();
             message.setText("No user that send message in DB");
             return List.of(message);
         }
 
-        String state = getDataPostfix(wholeState);
+        String stateAsRecipient = getDataPostfix(wholeState);
 
-        if (FIRST_STATE.equals(state)) {
-            recipientUsername = update.getMessage().getText();
-            if (recipientUsername != null) {
-                recipientUsername = recipientUsername.substring(1);
-            } else {
-                return Collections.emptyList(); //no message was send by user
+        if (FIRST_STATE.equals(stateAsRecipient)) {
+            recipientUsername = getRecipientUsername(update.getMessage().getText());
+            if(recipientUsername == null) {         //no message was send by user
+                return Collections.emptyList();
             }
 
             if (groupService.isUserInGroup(update.getMessage().getChatId(), recipientUsername)) {
@@ -104,26 +100,24 @@ public class AddPaymentHandler implements CommandHandler {
 
             updatePersonGroupChatState(update, recipientUsername);
         } else {
-
             amount = parseAmount(update.getMessage().getText());
             if (isBadInputAmount(message, amount)) return List.of(message);
 
-            message.setText(MSG_FINAL(amount, state));
+            message.setText(MSG_FINAL(amount, stateAsRecipient));
             updatePersonGroupChatState(update, NO_STATE);
 
-            //TODO: auto generating id
-            paymentService.addPayment(
-                    new Payment(
-                            1L,
-                            update.getMessage().getChatId(),
-                            LocalDate.now(),
-                            update.getMessage().getFrom().getUserName(),
-                            amount,
-                            recipientUsername,
-                            false));
+            paymentService.addPayment(createPayment(update, amount, stateAsRecipient));
         }
 
         return List.of(message);
+    }
+
+    private String getRecipientUsername(String input) {
+        if (input != null) {
+            return input.substring(1);
+        } else {
+            return null;
+        }
     }
 
     private double parseAmount(String strAmount) {
@@ -144,6 +138,16 @@ public class AddPaymentHandler implements CommandHandler {
         return false;
     }
 
+    private Payment createPayment(Update update, Double amount, String recipientUsername) {
+        return new Payment(
+                sequenceGeneratorService.generateSequence(Payment.SEQUENCE_NAME),
+                update.getMessage().getChatId(),
+                LocalDate.now(),
+                update.getMessage().getFrom().getUserName(),
+                amount,
+                recipientUsername,
+                false);
+    }
 
     @Override
     public Command commandToHandle() {
