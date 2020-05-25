@@ -20,7 +20,7 @@ import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -87,7 +87,7 @@ public class CheckPaymentsHandler implements CommandHandler {
         }
 
         try {
-            currentPayment = paymentService.getFirstPaymentWithUserBefore(LocalDate.now(), getUsername(update));
+            currentPayment = paymentService.getFirstPaymentWithUserBefore(LocalDateTime.now(), getUsername(update));
         } catch (PaymentNotFoundException e) {
             e.printStackTrace();
             message.setText(MSG_NO_PAYMENTS_AT_ALL);
@@ -107,29 +107,29 @@ public class CheckPaymentsHandler implements CommandHandler {
                 currentPerson.getChatId(),
                 GeneralPaymentInfoBuilder.of(currentPayment, groupTitle)
         );
-        message.setReplyMarkup(getKeyboardMarkup());
+        message.setReplyMarkup(getKeyboardMarkup(currentPayment));
         return message;
     }
 
-    private InlineKeyboardMarkup getKeyboardMarkup() {
+    private InlineKeyboardMarkup getKeyboardMarkup(Payment nextPayment) {
         InlineKeyboardMarkupBuilder builder = new InlineKeyboardMarkupBuilder();
-        if (currentPayment.getRecipient().equals(currentPerson.getUsername())) {
-            String label = currentPayment.getIsConfirmed() ? LBL_UNCONFIRM : LBL_CONFIRM;
+        if (nextPayment.getRecipient().equals(currentPerson.getUsername())) {
+            String label = nextPayment.getIsConfirmed() ? LBL_UNCONFIRM : LBL_CONFIRM;
             builder.setButton(
                     0, 0,
                     label,
                     CallbackData.TOGGLE_CONFIRMATION +
-                            getPaymentIdPart(currentPayment));
+                            getPaymentIdPart(nextPayment));
         }
         builder
                 .setButton(1, 0,
                         LBL_NEWER_PAYMENT,
                         CallbackData.LOAD_NEWER_PAYMENT.getValue()
-                                + getPaymentIdPart(currentPayment))
+                                + getPaymentIdPart(nextPayment))
                 .setButton(1, 1,
                         LBL_OLDER_PAYMENT,
                         CallbackData.LOAD_OLDER_PAYMENT.getValue()
-                                + getPaymentIdPart(currentPayment));
+                                + getPaymentIdPart(nextPayment));
         return builder.build();
     }
 
@@ -183,16 +183,16 @@ public class CheckPaymentsHandler implements CommandHandler {
     }
 
     private List<BotApiMethod<?>> loadPreviousPayment() {
-        return updateKeyboard(currentPayment);
+        return updateKeyboardAndMessage(currentPayment);
     }
 
     private List<BotApiMethod<?>> toggleConfirmation() {
         currentPayment.setIsConfirmed(!currentPayment.getIsConfirmed());
         paymentService.updatePayment(currentPayment);
-        return updateKeyboard(currentPayment);
+        return updateKeyboardAndMessage(currentPayment);
     }
 
-    private List<BotApiMethod<?>> updateKeyboard(Payment nextPayment) {
+    private List<BotApiMethod<?>> updateKeyboardAndMessage(Payment nextPayment) {
         List<BotApiMethod<?>> apiMethods = new ArrayList<>();
         EditMessageText editText = new EditMessageText();
         editText
@@ -201,7 +201,7 @@ public class CheckPaymentsHandler implements CommandHandler {
                 .setMessageId(currentUpdate.getCallbackQuery().getMessage().getMessageId());
         EditMessageReplyMarkup editMarkup = new EditMessageReplyMarkup();
         editMarkup
-                .setReplyMarkup(getKeyboardMarkup())
+                .setReplyMarkup(getKeyboardMarkup(nextPayment))
                 .setInlineMessageId(currentUpdate.getCallbackQuery().getInlineMessageId())
                 .setChatId(currentPerson.getChatId())
                 .setMessageId(currentUpdate.getCallbackQuery().getMessage().getMessageId());
@@ -226,7 +226,7 @@ public class CheckPaymentsHandler implements CommandHandler {
         }
 
         updatePersonBotChatState(getPaymentIdPart(nextPayment));
-        return updateKeyboard(nextPayment);
+        return updateKeyboardAndMessage(nextPayment);
     }
 
     private List<BotApiMethod<?>> loadNewerPayment() {
@@ -242,7 +242,7 @@ public class CheckPaymentsHandler implements CommandHandler {
             return buildKeyboardWithOneButton(LBL_OLDER_PAYMENT);
         }
         updatePersonBotChatState(getPaymentIdPart(nextPayment));
-        return updateKeyboard(nextPayment);
+        return updateKeyboardAndMessage(nextPayment);
     }
 
     private void updatePersonBotChatState(String state) {

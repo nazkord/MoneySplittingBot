@@ -6,9 +6,8 @@ import com.dbteam.repository.PaymentRepository;
 import com.dbteam.service.PaymentService;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class PaymentServiceImpl implements PaymentService {
@@ -76,18 +75,19 @@ public class PaymentServiceImpl implements PaymentService {
     }
 
     @Override
-    public Payment getFirstPaymentWithUserBefore(LocalDate date, String username) throws PaymentNotFoundException {
-        return paymentRepository
-                .getFirstByRecipientEqualsOrPayerEqualsAndDateBeforeOrderByDateDesc(
-                        username, username, date).orElseThrow(new PaymentNotFoundException());
-
+    public Payment getFirstPaymentWithUserBefore(LocalDateTime date, String username) throws PaymentNotFoundException {
+        List<Payment> list = paymentRepository
+                .getByRecipientEqualsOrPayerEqualsAndDateLessThanOrderByDateDesc(
+                        username, username, date);
+        return list.get(0);
     }
 
     @Override
-    public Payment getFirstPaymentWithUserAfter(LocalDate date, String username) throws PaymentNotFoundException {
-        return paymentRepository
-                .getFirstByRecipientEqualsOrPayerEqualsAndDateAfterOrderByDateDesc(
-                        username, username, date).orElseThrow(new PaymentNotFoundException());
+    public Payment getFirstPaymentWithUserAfter(LocalDateTime date, String username) throws PaymentNotFoundException {
+        List<Payment> list = paymentRepository
+                .getByRecipientEqualsOrPayerEqualsAndDateGreaterThanOrderByDateDesc(
+                        username, username, date);
+        return list.get(0);
     }
 
     @Override

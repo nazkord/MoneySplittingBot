@@ -102,7 +102,7 @@ public class MoneySplittingBot extends AbilityBot {
                 .build();
     }
 
-    public Ability AddPaymentAbility() {
+    public Ability addPaymentAbility() {
 
         Consumer<MessageContext> primaryAction = ctx -> {
             CommandHandler handler = commandHandlerFactory.getHandler(Command.ADD_PAYMENT);
@@ -117,6 +117,7 @@ public class MoneySplittingBot extends AbilityBot {
         };
 
         Predicate<Update> condition = upd -> {
+            if (upd.getMessage().isUserMessage()) return false;
             try {
                 String tempState = stateService
                         .getUserGroupChatState(
@@ -136,7 +137,7 @@ public class MoneySplittingBot extends AbilityBot {
         return Ability.builder()
                 .name(Command.ADD_PAYMENT.getValue().toLowerCase())
                 .privacy(PUBLIC)
-                .locality(ALL)        //should this ability be available in userChat with bot? Or only in group (as I did)
+                .locality(GROUP)
                 .input(0)
                 .info("Add a new payment to the group")
                 .action(primaryAction)

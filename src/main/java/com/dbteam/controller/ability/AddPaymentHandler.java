@@ -10,6 +10,7 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
 
@@ -147,7 +148,7 @@ public class AddPaymentHandler implements CommandHandler {
         return new Payment(
                 sequenceGeneratorService.generateSequence(Payment.SEQUENCE_NAME),
                 update.getMessage().getChatId(),
-                LocalDate.now(),
+                LocalDateTime.now(),
                 update.getMessage().getFrom().getUserName(),
                 amount,
                 recipientUsername,

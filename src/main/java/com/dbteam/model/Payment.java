@@ -6,7 +6,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.Transient;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Data
 @AllArgsConstructor
@@ -19,7 +19,7 @@ public class Payment {
     @Id
     Long paymentId;
     Long groupChatId;
-    LocalDate date;
+    LocalDateTime date;
     String payer;
     Double amount;
     String recipient;
