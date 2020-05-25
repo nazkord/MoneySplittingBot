@@ -17,6 +17,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.telegram.abilitybots.api.bot.AbilityBot;
 import org.telegram.abilitybots.api.objects.Ability;
+import org.telegram.abilitybots.api.objects.Flag;
 import org.telegram.abilitybots.api.objects.MessageContext;
 import org.telegram.abilitybots.api.objects.Reply;
 import org.telegram.telegrambots.meta.api.objects.Update;
@@ -24,7 +25,7 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 
-import static org.telegram.abilitybots.api.objects.Locality.USER;
+import static org.telegram.abilitybots.api.objects.Locality.*;
 import static org.telegram.abilitybots.api.objects.Privacy.PUBLIC;
 
 @Component
@@ -41,7 +42,6 @@ public class MoneySplittingBot extends AbilityBot {
 
     public MoneySplittingBot(
             BotConfiguration botConfiguration,
-
             EventHandlerFactory eventHandlerFactory,
             CallbackHandlerFactory callbackHandlerFactory,
             CommandHandlerFactory commandHandlerFactory,
@@ -92,16 +92,58 @@ public class MoneySplittingBot extends AbilityBot {
                 .forEach(silent::execute);
         };
 
-        Ability.AbilityBuilder builder = Ability.builder()
-                .name("start")
+        return Ability.builder()
+                .name(Command.START.getValue())
                 .privacy(PUBLIC)
                 .locality(USER)
                 .input(0)
                 .info("I am MoneySplittingBot!")
-                .action(consumer);
+                .action(consumer)
+                .build();
+    }
 
-        return builder.build();
+    public Ability AddPaymentAbility() {
 
+        Consumer<MessageContext> primaryAction = ctx -> {
+            CommandHandler handler = commandHandlerFactory.getHandler(Command.ADD_PAYMENT);
+            handler.primaryAction(ctx.update())
+                    .forEach(silent::execute);
+        };
+
+        Consumer<Update> secondaryConsumer = upd -> {
+            CommandHandler handler = commandHandlerFactory.getHandler(Command.ADD_PAYMENT);
+            handler.secondaryAction(upd)
+                    .forEach(silent::execute);
+        };
+
+        Predicate<Update> condition = upd -> {
+            try {
+                String tempState = stateService
+                        .getUserGroupChatState(
+                                upd.getMessage().getFrom().getUserName(),
+                                upd.getMessage().getChatId());
+                if(tempState != null) {
+                    return tempState.startsWith(Command.ADD_PAYMENT.getValue());
+                } else {
+                    return false;
+                }
+            } catch (PersonNotFoundException e) {
+                e.printStackTrace();
+                return false;
+            }
+        };
+
+        return Ability.builder()
+                .name(Command.ADD_PAYMENT.getValue().toLowerCase())
+                .privacy(PUBLIC)
+                .locality(ALL)        //should this ability be available in userChat with bot? Or only in group (as I did)
+                .input(0)
+                .info("Add a new payment to the group")
+                .action(primaryAction)
+                .reply(secondaryConsumer,
+                        Flag.MESSAGE,
+                        condition)
+                .build();
     }
 
     public Ability CheckPaymentsAbility() {
@@ -122,7 +164,7 @@ public class MoneySplittingBot extends AbilityBot {
             if (upd.hasCallbackQuery() && upd.getCallbackQuery().getMessage().getChat().isUserChat()) {
                 try {
                     return stateService
-                            .usersBotChatStateStartsWith(
+                            .isUserBotChatStateStartsWith(
                                     upd.getCallbackQuery().getMessage().getFrom().getUserName(),
                                     "checkpayments");
                 } catch (PersonNotFoundException e) {
@@ -143,7 +185,6 @@ public class MoneySplittingBot extends AbilityBot {
                 .reply(secondaryConsumer, condition);
 
         return builder.build();
-
     }
 
     public Ability CheckBalanceAbility(){

@@ -19,7 +19,7 @@ import java.util.Map;
 public class StartHandler implements CommandHandler{
 
     private static final String MSG_START =
-            "Hello! I am MoneySplittingBot. I can remember all your group expenses. ";
+            "Hello! I am MoneySplittingBot. I can remember all your group expenses.";
     private static final String MSG_NO_GROUPS =
             "Add me to your group chat and I will show you what I can!";
 
@@ -63,10 +63,6 @@ public class StartHandler implements CommandHandler{
         personService.addPerson(person);
 
         return List.of(message);
-    }
-
-    private String getUsername(Update update) {
-        return update.getMessage().getFrom().getUserName();
     }
 
     private Person getPersonFrom(Update update) {

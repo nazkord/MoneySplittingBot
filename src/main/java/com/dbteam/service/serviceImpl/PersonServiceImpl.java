@@ -44,8 +44,13 @@ public class PersonServiceImpl implements PersonService {
     }
 
     @Override
-    public void updatePersonGroupChatState(String username, String newState, Long groupChatId) throws PersonNotFoundException {
-        Person person = findPersonByUsername(username);
+    public void updatePersonGroupChatState(String username, String newState, Long groupChatId) {
+        Person person = null;
+        try {
+            person = findPersonByUsername(username);
+        } catch (PersonNotFoundException e) {
+            return;
+        }
         person.getGroupChatsStates().put(groupChatId, newState);
         updatePerson(person);
     }

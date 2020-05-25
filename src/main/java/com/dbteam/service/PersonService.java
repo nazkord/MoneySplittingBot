@@ -12,7 +12,7 @@ public interface PersonService {
 
     void updatePersonBotChatState(String username, String newState) throws PersonNotFoundException;
 
-    void updatePersonGroupChatState(String username, String newState, Long groupChatId) throws PersonNotFoundException;
+    void updatePersonGroupChatState(String username, String newState, Long groupChatId);
 
     String getPersonBotChatState(String username) throws PersonNotFoundException;
 

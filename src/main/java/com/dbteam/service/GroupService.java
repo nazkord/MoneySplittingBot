@@ -10,5 +10,5 @@ public interface GroupService {
     void updateGroup(Group group);
     Group findGroupById(Long groupChatId) throws GroupNotFoundException;
     void addUserToGroup(Long groupChatId, Person person) throws PersonNotFoundException, GroupNotFoundException;
-    Boolean isUserInGroup(Long groupChatId, String username) throws GroupNotFoundException, PersonNotFoundException;
+    Boolean isUserInGroup(Long groupChatId, String username);
 }

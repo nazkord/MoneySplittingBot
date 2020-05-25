@@ -62,10 +62,14 @@ public class GroupServiceImpl implements GroupService {
     }
 
     @Override
-    public Boolean isUserInGroup(Long groupChatId, String username) throws GroupNotFoundException, PersonNotFoundException {
-        Group group = findGroupById(groupChatId);
-        Person person = personService.findPersonByUsername(username);
-        return group.getPeople().contains(person);
+    public Boolean isUserInGroup(Long groupChatId, String username) {
+        Group group = null;
+        try {
+            group = findGroupById(groupChatId);
+        } catch (GroupNotFoundException e) {
+            return false;
+        }
+        return group.getPeople().stream().anyMatch(p -> p.getUsername().equals(username));
     }
 }
 
