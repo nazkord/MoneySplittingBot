@@ -91,6 +91,11 @@ public class AddPaymentHandler implements CommandHandler {
                 return Collections.emptyList();
             }
 
+            if(recipientUsername.equals(getUsername(update))) {
+                message.setText("You can't pay to yourself!");
+                return List.of(message);
+            }
+
             if (groupService.isUserInGroup(update.getMessage().getChatId(), recipientUsername)) {
                 message.setText(MSG_AMOUNT);
             } else {
@@ -131,7 +136,7 @@ public class AddPaymentHandler implements CommandHandler {
     }
 
     private boolean isBadInputAmount(SendMessage message, double amount) {
-        if(amount < 0) {
+        if(amount <= 0) {
             message.setText("Should be a number greater than 0");
             return true;
         }
