@@ -118,11 +118,15 @@ public class MoneySplittingBot extends AbilityBot {
 
         Predicate<Update> condition = upd -> {
             try {
-                return stateService
+                String tempState = stateService
                         .getUserGroupChatState(
                                 upd.getMessage().getFrom().getUserName(),
-                                upd.getMessage().getChatId()
-                        ).startsWith(Command.ADD_PAYMENT.getValue());
+                                upd.getMessage().getChatId());
+                if(tempState != null) {
+                    return tempState.startsWith(Command.ADD_PAYMENT.getValue());
+                } else {
+                    return false;
+                }
             } catch (PersonNotFoundException e) {
                 e.printStackTrace();
                 return false;

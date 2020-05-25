@@ -27,7 +27,7 @@ public class AddPaymentHandler implements CommandHandler {
     }
 
     private static final String FIRST_STATE = "initial";
-    private static final String NO_STATE = "";
+    private static final String NO_STATE = "noState";
 
     private final PersonService personService;
     private final StateService stateService;
