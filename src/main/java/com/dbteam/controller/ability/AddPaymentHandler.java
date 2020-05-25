@@ -1,6 +1,5 @@
 package com.dbteam.controller.ability;
 
-import com.dbteam.exception.GroupNotFoundException;
 import com.dbteam.exception.PersonNotFoundException;
 import com.dbteam.model.Command;
 import com.dbteam.model.Payment;
@@ -14,6 +13,7 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
 import java.time.LocalDate;
+import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -22,9 +22,15 @@ public class AddPaymentHandler implements CommandHandler {
     private static final String MSG_RECIPIENT = "Who did you pay to (Start with @)?";
     private static final String MSG_AMOUNT = "How much did you pay?";
     private static String MSG_FINAL(Double amount, String recipient) {
-        return String.format("You paid %f to %s!", amount, recipient);
+        return String.format("You paid %1.2f to %s!", amount, recipient);
     }
+    private static String NO_SUCH_USER(String username) {
+        return String.format("There is no user %s in this group!" +
+                "Maybe this user should accept invitation from bot!", username);
+    }
+
     private static final String FIRST_STATE = "initial";
+    private static final String NO_STATE = "";
 
     private final PersonService personService;
     private final StateService stateService;
@@ -44,19 +50,21 @@ public class AddPaymentHandler implements CommandHandler {
         message.setText(MSG_RECIPIENT);
         message.setChatId(update.getMessage().getChatId());
 
-        try {
-            updatePersonGroupChatState(update, FIRST_STATE);
-        } catch (PersonNotFoundException e) {
-            message.setText("No such user in DB");
-        }
+        updatePersonGroupChatState(update, FIRST_STATE);
 
         return List.of(message);
     }
 
-    private void updatePersonGroupChatState(Update update, String state) throws PersonNotFoundException {
+    private void updatePersonGroupChatState(Update update, String state) {
+        String statePrefix;
+        if(state.equals(NO_STATE)) {
+            statePrefix = "";
+        } else {
+            statePrefix = Command.ADD_PAYMENT.getValue();
+        }
         personService.updatePersonGroupChatState(
                 getUsername(update),
-                stateService.buildBotChatState(Command.ADD_PAYMENT.getValue(), state),
+                stateService.buildBotChatState(statePrefix, state),
                 update.getMessage().getChatId()
         );
     }
@@ -80,49 +88,28 @@ public class AddPaymentHandler implements CommandHandler {
         String state = getDataPostfix(wholeState);
 
         if (FIRST_STATE.equals(state)) {
-            try {
-                recipientUsername = update.getMessage().getText().substring(1);
-                if(groupService.isUserInGroup(update.getMessage().getChatId(), recipientUsername)) {
-                    message.setText(MSG_AMOUNT);
-                } else {
-                    message.setText(
-                            String.format("There is no user %s in this group!" +
-                                    "Maybe this user should accept invitation from bot!", update.getMessage().getText()));
-                    return List.of(message);
-                }
-            } catch (PersonNotFoundException | GroupNotFoundException e) {
-                e.printStackTrace();
-                message.setText(
-                        String.format("There is no user %s in this group!" +
-                                "Maybe this user should accept invitation from bot!", update.getMessage().getText()));
+            recipientUsername = update.getMessage().getText();
+            if (recipientUsername != null) {
+                recipientUsername = recipientUsername.substring(1);
+            } else {
+                return Collections.emptyList(); //no message was send by user
+            }
+
+            if (groupService.isUserInGroup(update.getMessage().getChatId(), recipientUsername)) {
+                message.setText(MSG_AMOUNT);
+            } else {
+                message.setText(NO_SUCH_USER(update.getMessage().getText()));
                 return List.of(message);
             }
 
-            try {
-                updatePersonGroupChatState(update, recipientUsername);
-            } catch (PersonNotFoundException e) {
-                e.printStackTrace();
-                message.setText("No user that send message in DB");
-                return List.of(message);
-            }
+            updatePersonGroupChatState(update, recipientUsername);
         } else {
-            try {
-                amount = Double.parseDouble(update.getMessage().getText());
-            } catch (NumberFormatException e) {
-                e.printStackTrace();
-                message.setText("Bad type provided!");
-                return List.of(message);
-            }
+
+            amount = parseAmount(update.getMessage().getText());
+            if (isBadInputAmount(message, amount)) return List.of(message);
 
             message.setText(MSG_FINAL(amount, state));
-
-            try {
-                updatePersonGroupChatState(update, "noState");
-            } catch (PersonNotFoundException e) {
-                e.printStackTrace();
-                message.setText("No user that send message in DB");
-                return List.of(message);
-            }
+            updatePersonGroupChatState(update, NO_STATE);
 
             //TODO: auto generating id
             paymentService.addPayment(
@@ -138,6 +125,25 @@ public class AddPaymentHandler implements CommandHandler {
 
         return List.of(message);
     }
+
+    private double parseAmount(String strAmount) {
+        double amount = -1;
+        try {
+            amount = Double.parseDouble(strAmount);
+        } catch (NumberFormatException e) {
+            // ignored
+        }
+        return amount;
+    }
+
+    private boolean isBadInputAmount(SendMessage message, double amount) {
+        if(amount < 0) {
+            message.setText("Should be a number greater than 0");
+            return true;
+        }
+        return false;
+    }
+
 
     @Override
     public Command commandToHandle() {
