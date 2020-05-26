@@ -206,15 +206,8 @@ public class MoneySplittingBot extends AbilityBot {
 
         Predicate<Update> condition = upd -> {
             if (upd.hasCallbackQuery() && upd.getCallbackQuery().getMessage().getChat().isUserChat()) {
-                try {
-                    return stateService
-                            .isUserBotChatStateStartsWith(
-                                    upd.getCallbackQuery().getFrom().getUserName(),
-                                    Command.CHECK_PAYMENTS.getValue().toLowerCase());
-                } catch (PersonNotFoundException e) {
-                    e.printStackTrace();
-                    return false;
-                }
+                return upd.getCallbackQuery().getData()
+                        .startsWith(Command.CHECK_PAYMENTS.getValue().toLowerCase());
             }
             return false;
         };
@@ -245,16 +238,9 @@ public class MoneySplittingBot extends AbilityBot {
         };
 
         Predicate<Update> condition = upd -> {
-            if (upd.hasCallbackQuery() && upd.getCallbackQuery().getMessage().getChat().isUserChat()) {
-                try {
-                    return stateService
-                            .isUserBotChatStateStartsWith(
-                                    upd.getCallbackQuery().getFrom().getUserName(),
-                                    "checkbalance");
-                } catch (PersonNotFoundException e) {
-                    e.printStackTrace();
-                    return false;
-                }
+            if (upd.hasCallbackQuery()) {
+                return upd.getCallbackQuery().getData()
+                        .startsWith(Command.CHECK_BALANCE.getValue().toLowerCase());
             }
             return false;
         };
@@ -262,7 +248,7 @@ public class MoneySplittingBot extends AbilityBot {
         Ability.AbilityBuilder builder = Ability.builder()
                 .name("checkbalance")
                 .privacy(PUBLIC)
-                .locality(USER)
+                .locality(GROUP)
                 .input(0)
                 .info("Check your balance")
                 .action(primaryConsumer)

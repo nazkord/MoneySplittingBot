@@ -8,6 +8,7 @@ import com.dbteam.model.CallbackData;
 import com.dbteam.model.Command;
 import com.dbteam.model.Person;
 import com.dbteam.service.*;
+import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
@@ -19,6 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+@Service
 public class CheckBalanceHandler implements CommandHandler {
     private static final String MSG_PRIMARY =
             "Okay. Looking for balance states.";
@@ -34,14 +36,16 @@ public class CheckBalanceHandler implements CommandHandler {
 
     private final BalanceService balanceService;
     private final PersonService personService;
+    private final StateService stateService;
 
     private Person currentPerson;
     private Long chatId;
 
     public CheckBalanceHandler(BalanceService balanceService,
-                               PersonService personService) {
+                               PersonService personService, StateService stateService) {
         this.balanceService = balanceService;
         this.personService = personService;
+        this.stateService = stateService;
     }
 
     @Override
@@ -88,11 +92,13 @@ public class CheckBalanceHandler implements CommandHandler {
         builder
                 .setButton(0, 0,
                         ONE_USER,
-                        CallbackData.CHECK_BALANCE_OF_ONE_USER.getValue()
+                        stateService.buildBotChatState(Command.CHECK_BALANCE.getValue().toLowerCase(),
+                            CallbackData.CHECK_BALANCE_OF_ONE_USER.getValue())
                 )
                 .setButton(0, 1,
                         ALL_USERS,
-                        CallbackData.CHECK_BALANCE_OF_ALL_USERS.getValue()
+                        stateService.buildBotChatState(Command.CHECK_BALANCE.getValue().toLowerCase(),
+                            CallbackData.CHECK_BALANCE_OF_ALL_USERS.getValue())
                 );
         return builder.build();
     }
@@ -107,7 +113,7 @@ public class CheckBalanceHandler implements CommandHandler {
 
         CallbackData data;
         try {
-            data = getCallbackDataPrefix(callbackQuery.getData());
+            data = getCallbackDataMiddlePart(callbackQuery.getData());
         }
         catch (NoSuchCallbackDataException e) {
             e.printStackTrace();
@@ -128,9 +134,10 @@ public class CheckBalanceHandler implements CommandHandler {
         }
     }
 
-    private CallbackData getCallbackDataPrefix(String data) throws NoSuchCallbackDataException {
+    private CallbackData getCallbackDataMiddlePart(String data) throws NoSuchCallbackDataException {
+        String middlePart = data.split("/")[1];
         for (CallbackData callbackData: CallbackData.values()) {
-            if (data.startsWith(callbackData.getValue()))
+            if (middlePart.startsWith(callbackData.getValue()))
                 return callbackData;
         }
         throw new NoSuchCallbackDataException();
