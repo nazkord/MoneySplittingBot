@@ -13,7 +13,9 @@ public enum Command {
 
     CHECK_BALANCE("checkBalance"),
 
-    ADD_PAYMENT("addPayment");
+    ADD_PAYMENT("addPayment"),
+
+    ADD_PURCHASE("addPurchase");
 
     String value;
 }

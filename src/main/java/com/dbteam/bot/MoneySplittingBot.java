@@ -102,7 +102,7 @@ public class MoneySplittingBot extends AbilityBot {
                 .build();
     }
 
-    public Ability addPaymentAbility() {
+    public Ability AddPaymentAbility() {
 
         Consumer<MessageContext> primaryAction = ctx -> {
             CommandHandler handler = commandHandlerFactory.getHandler(Command.ADD_PAYMENT);
@@ -140,6 +140,49 @@ public class MoneySplittingBot extends AbilityBot {
                 .locality(GROUP)
                 .input(0)
                 .info("Add a new payment to the group")
+                .action(primaryAction)
+                .reply(secondaryConsumer,
+                        Flag.MESSAGE,
+                        condition)
+                .build();
+    }
+
+    public Ability AddPurchaseAbility() {
+        Consumer<MessageContext> primaryAction = ctx -> {
+            CommandHandler handler = commandHandlerFactory.getHandler(Command.ADD_PURCHASE);
+            handler.primaryAction(ctx.update())
+                    .forEach(silent::execute);
+        };
+
+        Consumer<Update> secondaryConsumer = upd -> {
+            CommandHandler handler = commandHandlerFactory.getHandler(Command.ADD_PURCHASE);
+            handler.secondaryAction(upd)
+                    .forEach(silent::execute);
+        };
+
+        Predicate<Update> condition = upd -> {
+            try {
+                String tempState = stateService
+                        .getUserGroupChatState(
+                                upd.getMessage().getFrom().getUserName(),
+                                upd.getMessage().getChatId());
+                if(tempState != null) {
+                    return tempState.startsWith(Command.ADD_PURCHASE.getValue());
+                } else {
+                    return false;
+                }
+            } catch (PersonNotFoundException e) {
+                e.printStackTrace();
+                return false;
+            }
+        };
+
+        return Ability.builder()
+                .name(Command.ADD_PURCHASE.getValue().toLowerCase())
+                .privacy(PUBLIC)
+                .locality(GROUP)
+                .input(0)
+                .info("Add a new purchase to the group")
                 .action(primaryAction)
                 .reply(secondaryConsumer,
                         Flag.MESSAGE,

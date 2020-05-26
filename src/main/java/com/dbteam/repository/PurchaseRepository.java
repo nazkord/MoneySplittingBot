@@ -21,4 +21,6 @@ public interface PurchaseRepository extends MongoRepository<Purchase, Long> {
      * Get all purchases of group.
      */
     List<Purchase> getPurchaseByGroupChatId(Long groupChatId);
+
+    Purchase getFirstByPurchaseId(Long purchaseId);
 }

@@ -19,8 +19,8 @@ public class PurchaseServiceImpl implements PurchaseService {
     }
 
     @Override
-    public void addPurchase(Purchase purchase) {
-        purchaseRepository.save(purchase);
+    public Long savePurchase(Purchase purchase) {
+        return purchaseRepository.save(purchase).getPurchaseId();
     }
 
     @Override
@@ -40,4 +40,13 @@ public class PurchaseServiceImpl implements PurchaseService {
                 .getPurchasesByRecipientsContainsAndGroupChatId(person, groupChatId);
     }
 
+    @Override
+    public Purchase getPurchaseById(Long purchaseId) {
+        return purchaseRepository.getFirstByPurchaseId(purchaseId);
+    }
+
+    @Override
+    public void remove(Purchase purchase) {
+        purchaseRepository.delete(purchase);
+    }
 }
