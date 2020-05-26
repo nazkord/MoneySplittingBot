@@ -40,15 +40,11 @@ public enum CallbackData {
      */
     LOAD_PREVIOUS_PAYMENT("LOAD_PREVIOUS_PAYMENT"),
 
-    /**
-     * /checkbalance command
-     */
-    CHECK_BALANCE_OF_ONE_USER("CHECK_BALANCE_OF_ONE_USER"),
 
     /**
      * /checkbalance command
      */
-    CHECK_BALANCE_OF_ALL_USERS("CHECK_BALANCE_OF_ALL_USERS");
+    CHECK_BALANCE("CHECK_BALANCE_OF_ALL_USERS");
 
 
     String value;
