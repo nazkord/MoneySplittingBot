@@ -118,19 +118,30 @@ public class CheckPaymentsHandler implements CommandHandler {
             builder.setButton(
                     0, 0,
                     label,
-                    CallbackData.TOGGLE_CONFIRMATION +
-                            getPaymentIdPart(nextPayment));
+                    buildCallbackDataWithNext(CallbackData.TOGGLE_CONFIRMATION, nextPayment));
         }
         builder
                 .setButton(1, 0,
                         LBL_NEWER_PAYMENT,
-                        CallbackData.LOAD_NEWER_PAYMENT.getValue()
-                                + getPaymentIdPart(nextPayment))
+                        buildCallbackDataWithNext(CallbackData.LOAD_NEWER_PAYMENT, nextPayment))
                 .setButton(1, 1,
                         LBL_OLDER_PAYMENT,
-                        CallbackData.LOAD_OLDER_PAYMENT.getValue()
-                                + getPaymentIdPart(nextPayment));
+                        buildCallbackDataWithNext(CallbackData.LOAD_OLDER_PAYMENT, nextPayment));
         return builder.build();
+    }
+
+    private String buildCallbackDataWithCurrent(CallbackData callbackData) {
+        return stateService.buildBotChatState(
+                Command.CHECK_PAYMENTS.getValue().toLowerCase(),
+                callbackData.getValue(),
+                currentPayment.getPaymentId().toString());
+    }
+
+    private String buildCallbackDataWithNext(CallbackData callbackData, Payment nextPayment) {
+        return stateService.buildBotChatState(
+                Command.CHECK_PAYMENTS.getValue().toLowerCase(),
+                callbackData.getValue(),
+                nextPayment.getPaymentId().toString());
     }
 
     @Override
@@ -142,7 +153,7 @@ public class CheckPaymentsHandler implements CommandHandler {
 
         CallbackData data;
         try {
-            data = getCallbackDataPrefix(callbackQuery.getData());
+            data = getClickedAction(callbackQuery.getData());
         } catch (NoSuchCallbackDataException e) {
             e.printStackTrace();
             SendMessage sendMessage = new SendMessage();
@@ -151,7 +162,7 @@ public class CheckPaymentsHandler implements CommandHandler {
             apiMethods.add(sendMessage);
             return apiMethods;
         }
-        Long currentPaymentId = Long.valueOf(getDataPostfix(callbackQuery.getData()));
+        Long currentPaymentId = getPaymentId(callbackQuery.getData());
         currentUpdate = update;
         try {
             currentPayment = paymentService.getPaymentById(currentPaymentId);
@@ -174,9 +185,14 @@ public class CheckPaymentsHandler implements CommandHandler {
         }
     }
 
-    private CallbackData getCallbackDataPrefix(String data) throws NoSuchCallbackDataException {
+    private long getPaymentId(String data) {
+        return Long.parseLong(data.split("/")[2]);
+    }
+
+    private CallbackData getClickedAction(String data) throws NoSuchCallbackDataException {
+        String clickedAction = data.split("/")[1];
         for (CallbackData callbackData: CallbackData.values()) {
-            if (data.startsWith(callbackData.getValue()))
+            if (clickedAction.startsWith(callbackData.getValue()))
                 return callbackData;
         }
         throw new NoSuchCallbackDataException();
@@ -265,8 +281,8 @@ public class CheckPaymentsHandler implements CommandHandler {
         InlineKeyboardMarkupBuilder builder = new InlineKeyboardMarkupBuilder();
         builder.setButton(0, 0,
                 buttonLabel,
-                CallbackData.LOAD_PREVIOUS_PAYMENT.getValue() +
-                        getPaymentIdPart(currentPayment));
+                stateService.buildBotChatState(
+                        buildCallbackDataWithCurrent(CallbackData.LOAD_PREVIOUS_PAYMENT)));
         EditMessageReplyMarkup editMarkup = new EditMessageReplyMarkup();
         editMarkup.setReplyMarkup(builder.build());
         editMarkup.setChatId(currentPerson.getChatId());
