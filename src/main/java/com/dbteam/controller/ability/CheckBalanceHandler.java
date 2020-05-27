@@ -85,7 +85,7 @@ public class CheckBalanceHandler implements CommandHandler {
         text.append(String.format("@%s, your balance table is ready:\n\n", currentPerson.getUsername()));
 
         for(Map.Entry<String, Double> entry : balanceMap.entrySet()){
-            text.append(String.format("@%-20s: %.2f\n", entry.getKey(), entry.getValue()));
+            text.append(String.format("@%-20s: %+.2f\n", entry.getKey(), entry.getValue()));
         }
 
         text.append("\n");
