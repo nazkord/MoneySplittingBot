@@ -225,36 +225,20 @@ public class MoneySplittingBot extends AbilityBot {
     }
 
     public Ability CheckBalanceAbility(){
-        Consumer<MessageContext> primaryConsumer = ctx -> {
+        Consumer<MessageContext> consumer = ctx -> {
             CommandHandler handler = commandHandlerFactory.getHandler(Command.CHECK_BALANCE);
             handler.primaryAction(ctx.update())
                     .forEach(silent::execute);
         };
 
-        Consumer<Update> secondaryConsumer = upd -> {
-            CommandHandler handler = commandHandlerFactory.getHandler(Command.CHECK_BALANCE);
-            handler.secondaryAction(upd)
-                    .forEach(silent::execute);
-        };
-
-        Predicate<Update> condition = upd -> {
-            if (upd.hasCallbackQuery()) {
-                return upd.getCallbackQuery().getData()
-                        .startsWith(Command.CHECK_BALANCE.getValue().toLowerCase());
-            }
-            return false;
-        };
-
-        Ability.AbilityBuilder builder = Ability.builder()
+        return Ability.builder()
                 .name("checkbalance")
                 .privacy(PUBLIC)
                 .locality(GROUP)
                 .input(0)
                 .info("Check your balance")
-                .action(primaryConsumer)
-                .reply(secondaryConsumer, condition);
-
-        return builder.build();
+                .action(consumer)
+                .build();
     }
 
 }
