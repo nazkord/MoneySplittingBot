@@ -30,8 +30,15 @@ public class NewMemberInGroupHandler implements CallbackHandler {
 
         Long chatId = getChatId(update);
         SendMessage ms = new SendMessage().setChatId(chatId);
+        Person person = getPersonFrom(update);
+        savePerson(person);
         try {
-            groupService.addUserToGroup(chatId, getPersonFrom(update));
+            person = personService.findPersonByUsername(person.getUsername());
+        } catch (PersonNotFoundException e) {
+            e.printStackTrace();
+        }
+        try {
+            groupService.addUserToGroup(chatId, person);
             ms.setText("@" + update.getCallbackQuery().getFrom().getUserName() + " has been added");
         } catch (GroupNotFoundException e) {
             ms.setText("There is no such group!");
@@ -40,6 +47,9 @@ public class NewMemberInGroupHandler implements CallbackHandler {
         }
 
         return ms;
+    }
+    private void savePerson(Person person) {
+        personService.addPerson(person);
     }
 
     @Override

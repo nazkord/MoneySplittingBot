@@ -128,17 +128,31 @@ public class BalanceServiceImpl implements BalanceService {
                 .getPurchasesWithBuyer(targetGroup.getGroupChatId(), targetPerson);
 
         purchases.forEach(purchase -> {
+            if (isPurchaseValid(purchase)) {
+                List<Person> recipients = purchase.getRecipients();
 
-            List<Person> recipients = purchase.getRecipients();
+                double dividedPrice = purchase.getAmount() / recipients.size();
 
-            double dividedPrice = purchase.getAmount() / recipients.size();
-
-            recipients.forEach(person -> {
-                double currentBalance = balanceMap.get(person.getUsername())
-                        + dividedPrice;
-                balanceMap.replace(person.getUsername(), currentBalance);
-            });
+                recipients.forEach(person -> {
+                    double currentBalance = balanceMap.get(person.getUsername())
+                            + dividedPrice;
+                    balanceMap.replace(person.getUsername(), currentBalance);
+                });
+            }
         });
+    }
+
+    private boolean isPurchaseValid(Purchase purchase) {
+        if (purchase == null) return false;
+        if (purchase.getPurchaseId()  == null) return false;
+        if (purchase.getAmount() == null) return false;
+        if (purchase.getBuyer() == null) return false;
+        if (purchase.getRecipients() == null) return false;
+        if (purchase.getRecipients().isEmpty()) return false;
+        if (purchase.getDate() == null) return false;
+        if (purchase.getDescription() == null) return false;
+        if (purchase.getGroupChatId() == null) return false;
+        else return true;
     }
 
 }

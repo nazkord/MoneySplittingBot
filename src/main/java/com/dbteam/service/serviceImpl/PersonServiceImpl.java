@@ -20,6 +20,7 @@ public class PersonServiceImpl implements PersonService {
 
     @Override
     public void addPerson(Person person) {
+        person.setUsername(person.getUsername().toLowerCase());
         personRepository.save(person);
     }
 

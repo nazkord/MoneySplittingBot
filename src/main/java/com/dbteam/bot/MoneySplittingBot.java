@@ -117,6 +117,11 @@ public class MoneySplittingBot extends AbilityBot {
         };
 
         Predicate<Update> condition = upd -> {
+            if (upd.hasMessage()) {
+                if (upd.getMessage().hasText() && upd.getMessage().getText().startsWith("/")) {
+                    return false;
+                }
+            }
             if (upd.getMessage().isUserMessage()) return false;
             try {
                 String tempState = stateService
@@ -161,6 +166,11 @@ public class MoneySplittingBot extends AbilityBot {
         };
 
         Predicate<Update> condition = upd -> {
+            if (upd.hasMessage()) {
+                if (upd.getMessage().hasText() && upd.getMessage().getText().startsWith("/")) {
+                    return false;
+                }
+            }
             try {
                 String tempState = stateService
                         .getUserGroupChatState(
@@ -205,6 +215,11 @@ public class MoneySplittingBot extends AbilityBot {
         };
 
         Predicate<Update> condition = upd -> {
+            if (upd.hasMessage()) {
+                if (upd.getMessage().hasText() && upd.getMessage().getText().startsWith("/")) {
+                    return false;
+                }
+            }
             if (upd.hasCallbackQuery() && upd.getCallbackQuery().getMessage().getChat().isUserChat()) {
                 return upd.getCallbackQuery().getData()
                         .startsWith(Command.CHECK_PAYMENTS.getValue().toLowerCase());
