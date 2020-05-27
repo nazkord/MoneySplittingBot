@@ -1,5 +1,6 @@
 package com.dbteam.controller.reply.handlers.event;
 
+import com.dbteam.exception.GroupNotFoundException;
 import com.dbteam.model.CallbackData;
 import com.dbteam.model.Event;
 import com.dbteam.model.Group;
@@ -30,7 +31,9 @@ public class BotAddedToGroupChatHandler implements EventHandler {
 
     @Override
     public SendMessage handleEvent(Update update) {
-        groupService.addGroup(new Group(update.getMessage().getChatId(), update.getMessage().getChat().getTitle(),Collections.emptyList()));
+        if (!groupAlreadyExists(update)) {
+            groupService.addGroup(new Group(update.getMessage().getChatId(), update.getMessage().getChat().getTitle(),Collections.emptyList()));
+        }
 
         InlineKeyboardButton button = new InlineKeyboardButton();
         button
@@ -44,6 +47,16 @@ public class BotAddedToGroupChatHandler implements EventHandler {
                 .setChatId(update.getMessage().getChatId())
                 .setText(MESSAGE_GREETING)
                 .setReplyMarkup(markup);
+    }
+
+    private boolean groupAlreadyExists(Update update) {
+        try {
+            groupService.findGroupById(update.getMessage().getChatId());
+            return true;
+        } catch (GroupNotFoundException e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 
     @Override

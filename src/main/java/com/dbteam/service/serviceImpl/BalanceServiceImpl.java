@@ -7,7 +7,6 @@ import com.dbteam.model.Payment;
 import com.dbteam.model.Person;
 import com.dbteam.model.Purchase;
 import com.dbteam.service.*;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
@@ -82,7 +81,7 @@ public class BalanceServiceImpl implements BalanceService {
                         targetPerson.getUsername(),
                         targetGroup.getGroupChatId());
 
-        payments.forEach( payment -> {
+        payments.forEach(payment -> {
 
             double currentBalance = balanceMap.get(payment.getPayer())
                     - payment.getAmount();
@@ -113,13 +112,15 @@ public class BalanceServiceImpl implements BalanceService {
                         targetGroup.getGroupChatId(), targetPerson);
 
        purchases.forEach(purchase -> {
+           if (isPurchaseValid(purchase)) {
 
-            double dividedPrice =
-                    purchase.getAmount() / purchase.getRecipients().size();
+               double dividedPrice =
+                       getDividedPrice(purchase.getAmount(), purchase.getRecipients().size() + 1);  // +1 for the buyer
 
-            double currentBalance = balanceMap.get(purchase.getBuyer()) - dividedPrice;
+               double currentBalance = balanceMap.get(purchase.getBuyer()) - dividedPrice;
 
-            balanceMap.replace(purchase.getBuyer(), currentBalance);
+               balanceMap.replace(purchase.getBuyer(), currentBalance);
+           }
         });
     }
 
@@ -131,15 +132,21 @@ public class BalanceServiceImpl implements BalanceService {
             if (isPurchaseValid(purchase)) {
                 List<Person> recipients = purchase.getRecipients();
 
-                double dividedPrice = purchase.getAmount() / recipients.size();
+                double dividedPrice = getDividedPrice(purchase.getAmount(), recipients.size() + 1); // +1 for the buyer
 
                 recipients.forEach(person -> {
+                    if (!balanceMap.containsKey(person.getUsername()))
+                        balanceMap.put(person.getUsername(), 0D);
                     double currentBalance = balanceMap.get(person.getUsername())
                             + dividedPrice;
                     balanceMap.replace(person.getUsername(), currentBalance);
                 });
             }
         });
+    }
+
+    private double getDividedPrice(Double amount, int recipientsCount) {
+        return  amount / Integer.valueOf(recipientsCount).doubleValue();
     }
 
     private boolean isPurchaseValid(Purchase purchase) {
