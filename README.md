@@ -17,6 +17,9 @@ Telegram bot for easier management expenses in groups of people.
 
 ## Database
 
+For the purpose of our project we chose MongoDB, mainly because of its flexibility of data model. <br>
+In order to gain the availability of the database between contributors we decided to create MongoDB Atlas Cluster which is running in AWS / Frankfurt (eu-central-1)
+
 ### Setup
 
 In order to connect your MongoDB Atlas Cluster fill the following 
@@ -31,6 +34,8 @@ spring.data.mongodb.username: <your_username>
 ```java
 spring.data.mongodb.password: <your_pasword>
 ```
+
+If you are not fimiliar with MongoDB Atlas please checkout the tutorail [here](https://docs.atlas.mongodb.com/connect-to-cluster/)
 
 ### Structure
 
