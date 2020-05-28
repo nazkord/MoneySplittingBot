@@ -1,12 +1,11 @@
 package com.dbteam.controller.ability;
 
 import com.dbteam.exception.PersonNotFoundException;
-import com.dbteam.model.Command;
-import com.dbteam.model.Payment;
-import com.dbteam.model.Person;
-import com.dbteam.model.Purchase;
+import com.dbteam.model.telegram.Command;
+import com.dbteam.model.db.Payment;
+import com.dbteam.model.db.Person;
+import com.dbteam.model.db.Purchase;
 import com.dbteam.service.*;
-import lombok.SneakyThrows;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;

@@ -1,7 +1,5 @@
 package com.dbteam.controller.builders;
 
-import com.dbteam.model.CallbackData;
-
 public interface MarkupBuilder {
 
     void reset();

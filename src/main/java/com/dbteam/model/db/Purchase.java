@@ -1,5 +1,6 @@
-package com.dbteam.model;
+package com.dbteam.model.db;
 
+import com.dbteam.model.db.Person;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import org.springframework.data.annotation.Id;

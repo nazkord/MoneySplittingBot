@@ -1,6 +1,6 @@
 package com.dbteam.controller.reply.condition;
 
-import com.dbteam.model.Event;
+import com.dbteam.model.telegram.Event;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 

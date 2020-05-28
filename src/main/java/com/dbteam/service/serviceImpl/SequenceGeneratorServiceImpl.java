@@ -1,6 +1,6 @@
 package com.dbteam.service.serviceImpl;
 
-import com.dbteam.model.SequenceId;
+import com.dbteam.model.db.SequenceId;
 import com.dbteam.service.SequenceGeneratorService;
 import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.data.mongodb.core.query.Update;

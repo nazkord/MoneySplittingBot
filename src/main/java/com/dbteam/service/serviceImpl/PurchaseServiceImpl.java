@@ -1,10 +1,9 @@
 package com.dbteam.service.serviceImpl;
 
-import com.dbteam.model.Person;
-import com.dbteam.model.Purchase;
+import com.dbteam.model.db.Person;
+import com.dbteam.model.db.Purchase;
 import com.dbteam.repository.PurchaseRepository;
 import com.dbteam.service.PurchaseService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

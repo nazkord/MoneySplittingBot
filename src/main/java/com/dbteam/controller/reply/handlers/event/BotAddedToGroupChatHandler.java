@@ -1,9 +1,9 @@
 package com.dbteam.controller.reply.handlers.event;
 
 import com.dbteam.exception.GroupNotFoundException;
-import com.dbteam.model.CallbackData;
-import com.dbteam.model.Event;
-import com.dbteam.model.Group;
+import com.dbteam.model.telegram.CallbackData;
+import com.dbteam.model.telegram.Event;
+import com.dbteam.model.db.Group;
 import com.dbteam.service.GroupService;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;

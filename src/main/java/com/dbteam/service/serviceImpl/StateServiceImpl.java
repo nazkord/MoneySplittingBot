@@ -1,11 +1,10 @@
 package com.dbteam.service.serviceImpl;
 
 import com.dbteam.exception.PersonNotFoundException;
-import com.dbteam.model.Person;
+import com.dbteam.model.db.Person;
 import com.dbteam.service.PersonService;
 import com.dbteam.service.StateService;
 import org.springframework.stereotype.Service;
-import org.telegram.telegrambots.meta.api.objects.Update;
 
 @Service
 public class StateServiceImpl implements StateService {

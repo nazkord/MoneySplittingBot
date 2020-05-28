@@ -2,8 +2,8 @@ package com.dbteam.service;
 
 import com.dbteam.exception.GroupNotFoundException;
 import com.dbteam.exception.PersonNotFoundException;
-import com.dbteam.model.Group;
-import com.dbteam.model.Person;
+import com.dbteam.model.db.Group;
+import com.dbteam.model.db.Person;
 
 public interface GroupService {
     void addGroup(Group group);

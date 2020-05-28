@@ -6,10 +6,10 @@ import com.dbteam.controller.reply.handlers.callback.CallbackHandlerFactory;
 import com.dbteam.controller.reply.handlers.event.EventHandlerFactory;
 
 import com.dbteam.exception.PersonNotFoundException;
-import com.dbteam.model.Callback;
-import com.dbteam.model.CallbackData;
-import com.dbteam.model.Command;
-import com.dbteam.model.Event;
+import com.dbteam.model.telegram.Callback;
+import com.dbteam.model.telegram.CallbackData;
+import com.dbteam.model.telegram.Command;
+import com.dbteam.model.telegram.Event;
 import com.dbteam.controller.reply.handlers.callback.CallbackHandler;
 
 import com.dbteam.service.StateService;

@@ -2,10 +2,10 @@ package com.dbteam.service.serviceImpl;
 
 import com.dbteam.exception.GroupNotFoundException;
 import com.dbteam.exception.PersonNotFoundException;
-import com.dbteam.model.Group;
-import com.dbteam.model.Payment;
-import com.dbteam.model.Person;
-import com.dbteam.model.Purchase;
+import com.dbteam.model.db.Group;
+import com.dbteam.model.db.Payment;
+import com.dbteam.model.db.Person;
+import com.dbteam.model.db.Purchase;
 import com.dbteam.service.*;
 import org.springframework.stereotype.Service;
 

@@ -2,8 +2,8 @@ package com.dbteam.controller.reply.handlers.callback;
 
 import com.dbteam.exception.GroupNotFoundException;
 import com.dbteam.exception.PersonNotFoundException;
-import com.dbteam.model.Callback;
-import com.dbteam.model.Person;
+import com.dbteam.model.telegram.Callback;
+import com.dbteam.model.db.Person;
 import com.dbteam.service.GroupService;
 import com.dbteam.service.PersonService;
 import org.springframework.stereotype.Service;

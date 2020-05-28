@@ -1,6 +1,6 @@
 package com.dbteam.repository;
 
-import com.dbteam.model.Person;
+import com.dbteam.model.db.Person;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;

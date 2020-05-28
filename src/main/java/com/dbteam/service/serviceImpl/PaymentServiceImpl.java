@@ -1,7 +1,7 @@
 package com.dbteam.service.serviceImpl;
 
 import com.dbteam.exception.PaymentNotFoundException;
-import com.dbteam.model.Payment;
+import com.dbteam.model.db.Payment;
 import com.dbteam.repository.PaymentRepository;
 import com.dbteam.service.PaymentService;
 import org.springframework.stereotype.Service;

@@ -1,6 +1,6 @@
 package com.dbteam.controller.reply.handlers.callback;
 
-import com.dbteam.model.Callback;
+import com.dbteam.model.telegram.Callback;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 

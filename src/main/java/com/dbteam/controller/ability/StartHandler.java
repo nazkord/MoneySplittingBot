@@ -1,9 +1,8 @@
 package com.dbteam.controller.ability;
 
 import com.dbteam.exception.PersonNotFoundException;
-import com.dbteam.model.Command;
-import com.dbteam.model.Person;
-import com.dbteam.service.GroupService;
+import com.dbteam.model.telegram.Command;
+import com.dbteam.model.db.Person;
 import com.dbteam.service.PersonService;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;

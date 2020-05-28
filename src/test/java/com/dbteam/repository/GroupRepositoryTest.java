@@ -1,7 +1,7 @@
 package com.dbteam.repository;
 
-import com.dbteam.model.Group;
-import com.dbteam.model.Person;
+import com.dbteam.model.db.Group;
+import com.dbteam.model.db.Person;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.extension.ExtendWith;

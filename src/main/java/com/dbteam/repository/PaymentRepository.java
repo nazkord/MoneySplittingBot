@@ -1,15 +1,12 @@
 package com.dbteam.repository;
 
-import com.dbteam.model.Payment;
+import com.dbteam.model.db.Payment;
 import org.springframework.data.mongodb.repository.MongoRepository;
-import org.springframework.data.mongodb.repository.Query;
 import org.springframework.stereotype.Repository;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Stream;
 
 @Repository
 public interface PaymentRepository extends MongoRepository<Payment, Long> {

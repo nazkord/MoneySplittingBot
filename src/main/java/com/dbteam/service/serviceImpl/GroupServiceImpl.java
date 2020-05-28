@@ -2,12 +2,11 @@ package com.dbteam.service.serviceImpl;
 
 import com.dbteam.exception.GroupNotFoundException;
 import com.dbteam.exception.PersonNotFoundException;
-import com.dbteam.model.Group;
-import com.dbteam.model.Person;
+import com.dbteam.model.db.Group;
+import com.dbteam.model.db.Person;
 import com.dbteam.repository.GroupRepository;
 import com.dbteam.service.GroupService;
 import com.dbteam.service.PersonService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;

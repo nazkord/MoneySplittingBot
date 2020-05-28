@@ -1,4 +1,4 @@
-package com.dbteam.model;
+package com.dbteam.model.db;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

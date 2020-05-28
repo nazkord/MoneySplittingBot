@@ -1,4 +1,4 @@
-package com.dbteam.model;
+package com.dbteam.model.telegram;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

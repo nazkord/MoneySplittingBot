@@ -1,6 +1,6 @@
 package com.dbteam.controller.builders;
 
-import com.dbteam.model.Payment;
+import com.dbteam.model.db.Payment;
 
 public class GeneralPaymentInfoBuilder implements PaymentInfoBuilder {
 

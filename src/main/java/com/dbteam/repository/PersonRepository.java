@@ -1,6 +1,6 @@
 package com.dbteam.repository;
 
-import com.dbteam.model.Person;
+import com.dbteam.model.db.Person;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;
 

@@ -1,7 +1,7 @@
 package com.dbteam.controller.reply.condition;
 
 import com.dbteam.bot.BotConfiguration;
-import com.dbteam.model.Event;
+import com.dbteam.model.telegram.Event;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.objects.Update;
 

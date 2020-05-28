@@ -1,7 +1,7 @@
 package com.dbteam.service;
 
 import com.dbteam.exception.PersonNotFoundException;
-import com.dbteam.model.Person;
+import com.dbteam.model.db.Person;
 
 public interface PersonService {
     void addPerson(Person person);

@@ -1,7 +1,7 @@
 package com.dbteam.controller.reply.handlers.callback;
 
 import com.dbteam.exception.NoCallbackQueryInUpdateException;
-import com.dbteam.model.Callback;
+import com.dbteam.model.telegram.Callback;
 import org.telegram.telegrambots.meta.api.methods.AnswerCallbackQuery;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;

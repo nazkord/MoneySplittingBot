@@ -1,9 +1,8 @@
 package com.dbteam.service;
 
 import com.dbteam.exception.PaymentNotFoundException;
-import com.dbteam.model.Payment;
+import com.dbteam.model.db.Payment;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 

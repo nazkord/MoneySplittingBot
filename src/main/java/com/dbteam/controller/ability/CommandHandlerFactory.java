@@ -1,6 +1,6 @@
 package com.dbteam.controller.ability;
 
-import com.dbteam.model.Command;
+import com.dbteam.model.telegram.Command;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
