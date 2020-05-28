@@ -17,7 +17,20 @@ Telegram bot for easier management expenses in groups of people.
 
 ## Database
 
+### Structure
 
+We design a database structure with following collections:
+
+* Users
+  * Fields: username, botStates, list of groupChatIds
+* Groups
+  * Fields: groupTitle, list of users
+* Purchases
+  * When you buy something for the some group of people and you want to split the bill between them
+* Payments
+  * When a user made a payment to somebody, user should register it in telegram group
+* Sequence_id
+  * Collection for handling records id
 
 ## Features:
 
