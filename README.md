@@ -33,7 +33,7 @@ spring.data.mongodb.username: <your_username>
  And add the following line to the envorinment variables of your project:
 
 ```java
-spring.data.mongodb.password: <your_pasword>
+spring.data.mongodb.password: <your_password>
 ```
 
 If you are not fimiliar with MongoDB Atlas please checkout the tutorail [here](https://docs.atlas.mongodb.com/connect-to-cluster/)
@@ -51,7 +51,7 @@ We design a database structure with following collections:
 * Payments
   * When a user made a payment to somebody, user should register it in telegram group
 * Sequence_id
-  * Spring boot mongo data does not provide utility for making ids auto-generated (incremented). So we created your own collection and service for handling records id.
+  * Spring boot mongo data does not provide utility for making ids auto-generated (incremented). So we created our own collection and service for handling records id. Service implementation are located [here](https://github.com/nazkord/MoneySplittingBot/blob/master/src/main/java/com/dbteam/service/serviceImpl/SequenceGeneratorServiceImpl.java) 
 
 Database models are in [model.db](https://github.com/nazkord/MoneySplittingBot/tree/master/src/main/java/com/dbteam/model/db)
 
