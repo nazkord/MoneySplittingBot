@@ -31,7 +31,9 @@ public class NewMemberInGroupHandler implements CallbackHandler {
         Long chatId = getChatId(update);
         SendMessage ms = new SendMessage().setChatId(chatId);
         Person person = getPersonFrom(update);
-        savePerson(person);
+        if (!personAlreadyExists(update)) {
+            savePerson(person);
+        }
         try {
             person = personService.findPersonByUsername(person.getUsername());
         } catch (PersonNotFoundException e) {
@@ -52,6 +54,18 @@ public class NewMemberInGroupHandler implements CallbackHandler {
         personService.addPerson(person);
     }
 
+    private boolean personAlreadyExists(Update update) {
+        try {
+            personService.findPersonByUsername(update.getMessage().getFrom().getUserName());
+            return true;
+        } catch (PersonNotFoundException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+
+
     @Override
     public AnswerCallbackQuery handleCallback(Update update) {
         AnswerCallbackQuery answer = new AnswerCallbackQuery();
@@ -69,7 +83,7 @@ public class NewMemberInGroupHandler implements CallbackHandler {
         User user = update.getCallbackQuery().getFrom();
         return new Person(user.getUserName(),
                 user.getFirstName() + " " + user.getLastName(),
-                getChatId(update), new HashMap<>(),
+                null, new HashMap<>(),
                 null);
     }
 }
