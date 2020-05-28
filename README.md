@@ -17,6 +17,21 @@ Telegram bot for easier management expenses in groups of people.
 
 ## Database
 
+### Setup
+
+In order to connect your MongoDB Atlas Cluster fill the following 
+[propetries](https://github.com/nazkord/MoneySplittingBot/blob/master/src/main/resources/application.properties)
+with: 
+```java
+spring.data.mongodb.username: <your_username>
+```
+
+ And add the following line to the envorinment variables of your project:
+
+```java
+spring.data.mongodb.password: <your_pasword>
+```
+
 ### Structure
 
 We design a database structure with following collections:
@@ -30,7 +45,9 @@ We design a database structure with following collections:
 * Payments
   * When a user made a payment to somebody, user should register it in telegram group
 * Sequence_id
-  * Collection for handling records id
+  * Spring boot mongo data does not provide utility for making ids auto-generated (incremented). So we created your own collection and service for handling records id.
+
+Database models are in [model.db](https://github.com/nazkord/MoneySplittingBot/tree/master/src/main/java/com/dbteam/model/db)
 
 ## Features:
 
