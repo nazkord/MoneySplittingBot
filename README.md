@@ -12,8 +12,9 @@ Telegram bot for easier management expenses in groups of people.
 
 #### Technologies stack:
 
-- Database: MongoDB Atlas
-- Bot: Spring Boot
+- Application: We used Spring Boot framework to create a telegram Bot using this [library](https://github.com/rubenlagus/TelegramBots/tree/master/telegrambots-abilities) <br>
+- Database: MongoDB Atlas. We used [Spring Boot Data Mongodb](https://spring.io/guides/gs/accessing-data-mongodb/) 
+to connect to the database and creating collections with documents.
 
 ## Database
 
