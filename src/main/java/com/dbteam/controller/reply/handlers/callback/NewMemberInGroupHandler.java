@@ -56,7 +56,7 @@ public class NewMemberInGroupHandler implements CallbackHandler {
 
     private boolean personAlreadyExists(Update update) {
         try {
-            personService.findPersonByUsername(update.getMessage().getFrom().getUserName());
+            personService.findPersonByUsername(update.getCallbackQuery().getFrom().getUserName());
             return true;
         } catch (PersonNotFoundException e) {
             e.printStackTrace();
