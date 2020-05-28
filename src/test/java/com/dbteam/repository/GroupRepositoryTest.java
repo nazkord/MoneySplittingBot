@@ -1,7 +1,7 @@
 package com.dbteam.repository;
 
-import com.dbteam.model.Group;
-import com.dbteam.model.Person;
+import com.dbteam.model.db.Group;
+import com.dbteam.model.db.Person;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -10,6 +10,7 @@ import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.util.Collections;
+import java.util.Map;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -22,7 +23,7 @@ public class GroupRepositoryTest {
     @Test
     public void findGroupByGroupChatId(@Autowired GroupRepository groupRepository) {
         //given
-        Person person = new Person("Pronia", "Pronia", 1L, null, null);
+        Person person = new Person("Pronia", "Pronia", 2L, Map.of(1L, ""), null);
         Group expectedGroup = new Group(1L,"Pronia's Group", Collections.singletonList(person));
         groupRepository.save(expectedGroup);
 

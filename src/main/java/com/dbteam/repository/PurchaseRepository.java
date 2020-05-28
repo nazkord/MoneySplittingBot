@@ -1,7 +1,7 @@
 package com.dbteam.repository;
 
-import com.dbteam.model.Person;
-import com.dbteam.model.Purchase;
+import com.dbteam.model.db.Person;
+import com.dbteam.model.db.Purchase;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;
 
@@ -21,4 +21,6 @@ public interface PurchaseRepository extends MongoRepository<Purchase, Long> {
      * Get all purchases of group.
      */
     List<Purchase> getPurchaseByGroupChatId(Long groupChatId);
+
+    Purchase getFirstByPurchaseId(Long purchaseId);
 }

@@ -1,7 +1,7 @@
 package com.dbteam.service;
 
 import com.dbteam.exception.PersonNotFoundException;
-import com.dbteam.model.Person;
+import com.dbteam.model.db.Person;
 
 public interface PersonService {
     void addPerson(Person person);
@@ -12,7 +12,7 @@ public interface PersonService {
 
     void updatePersonBotChatState(String username, String newState) throws PersonNotFoundException;
 
-    void updatePersonGroupChatState(String username, String newState, Long groupChatId) throws PersonNotFoundException;
+    void updatePersonGroupChatState(String username, String newState, Long groupChatId);
 
     String getPersonBotChatState(String username) throws PersonNotFoundException;
 

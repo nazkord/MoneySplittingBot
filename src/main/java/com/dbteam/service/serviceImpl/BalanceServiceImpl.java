@@ -2,12 +2,11 @@ package com.dbteam.service.serviceImpl;
 
 import com.dbteam.exception.GroupNotFoundException;
 import com.dbteam.exception.PersonNotFoundException;
-import com.dbteam.model.Group;
-import com.dbteam.model.Payment;
-import com.dbteam.model.Person;
-import com.dbteam.model.Purchase;
+import com.dbteam.model.db.Group;
+import com.dbteam.model.db.Payment;
+import com.dbteam.model.db.Person;
+import com.dbteam.model.db.Purchase;
 import com.dbteam.service.*;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
@@ -82,7 +81,7 @@ public class BalanceServiceImpl implements BalanceService {
                         targetPerson.getUsername(),
                         targetGroup.getGroupChatId());
 
-        payments.forEach( payment -> {
+        payments.forEach(payment -> {
 
             double currentBalance = balanceMap.get(payment.getPayer())
                     - payment.getAmount();
@@ -113,13 +112,15 @@ public class BalanceServiceImpl implements BalanceService {
                         targetGroup.getGroupChatId(), targetPerson);
 
        purchases.forEach(purchase -> {
+           if (isPurchaseValid(purchase)) {
 
-            double dividedPrice =
-                    purchase.getAmount() / purchase.getRecipients().size();
+               double dividedPrice =
+                       getDividedPrice(purchase.getAmount(), purchase.getRecipients().size() + 1);  // +1 for the buyer
 
-            double currentBalance = balanceMap.get(purchase.getBuyer()) - dividedPrice;
+               double currentBalance = balanceMap.get(purchase.getBuyer()) - dividedPrice;
 
-            balanceMap.replace(purchase.getBuyer(), currentBalance);
+               balanceMap.replace(purchase.getBuyer(), currentBalance);
+           }
         });
     }
 
@@ -128,17 +129,37 @@ public class BalanceServiceImpl implements BalanceService {
                 .getPurchasesWithBuyer(targetGroup.getGroupChatId(), targetPerson);
 
         purchases.forEach(purchase -> {
+            if (isPurchaseValid(purchase)) {
+                List<Person> recipients = purchase.getRecipients();
 
-            List<Person> recipients = purchase.getRecipients();
+                double dividedPrice = getDividedPrice(purchase.getAmount(), recipients.size() + 1); // +1 for the buyer
 
-            double dividedPrice = purchase.getAmount() / recipients.size();
-
-            recipients.forEach(person -> {
-                double currentBalance = balanceMap.get(person.getUsername())
-                        + dividedPrice;
-                balanceMap.replace(person.getUsername(), currentBalance);
-            });
+                recipients.forEach(person -> {
+                    if (!balanceMap.containsKey(person.getUsername()))
+                        balanceMap.put(person.getUsername(), 0D);
+                    double currentBalance = balanceMap.get(person.getUsername())
+                            + dividedPrice;
+                    balanceMap.replace(person.getUsername(), currentBalance);
+                });
+            }
         });
+    }
+
+    private double getDividedPrice(Double amount, int recipientsCount) {
+        return  amount / Integer.valueOf(recipientsCount).doubleValue();
+    }
+
+    private boolean isPurchaseValid(Purchase purchase) {
+        if (purchase == null) return false;
+        if (purchase.getPurchaseId()  == null) return false;
+        if (purchase.getAmount() == null) return false;
+        if (purchase.getBuyer() == null) return false;
+        if (purchase.getRecipients() == null) return false;
+        if (purchase.getRecipients().isEmpty()) return false;
+        if (purchase.getDate() == null) return false;
+        if (purchase.getDescription() == null) return false;
+        if (purchase.getGroupChatId() == null) return false;
+        else return true;
     }
 
 }

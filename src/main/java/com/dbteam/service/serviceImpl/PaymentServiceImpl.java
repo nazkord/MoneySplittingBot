@@ -1,14 +1,13 @@
 package com.dbteam.service.serviceImpl;
 
 import com.dbteam.exception.PaymentNotFoundException;
-import com.dbteam.model.Payment;
+import com.dbteam.model.db.Payment;
 import com.dbteam.repository.PaymentRepository;
 import com.dbteam.service.PaymentService;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class PaymentServiceImpl implements PaymentService {
@@ -21,6 +20,11 @@ public class PaymentServiceImpl implements PaymentService {
 
     @Override
     public void addPayment(Payment payment) {
+        paymentRepository.save(payment);
+    }
+
+    @Override
+    public void updatePayment(Payment payment) {
         paymentRepository.save(payment);
     }
 
@@ -71,17 +75,46 @@ public class PaymentServiceImpl implements PaymentService {
     }
 
     @Override
-    public Payment getFirstPaymentWithUserBefore(LocalDate date, String username) throws PaymentNotFoundException {
-        return paymentRepository
-                .getFirstByRecipientEqualsOrPayerEqualsAndDateBeforeOrderByDateDesc(
-                        username, username, date).orElseThrow(new PaymentNotFoundException());
-
+    public Payment getFirstPaymentWithUserBefore(LocalDateTime date, String username) throws PaymentNotFoundException {
+        List<Payment> list = paymentRepository
+                .getByRecipientEqualsOrPayerEqualsAndDateLessThanOrderByDateDesc(
+                        username, username, date);
+        for (Payment payment: list) {
+            if (payment.getDate().isBefore(date)) return payment;
+        }
+        return null;
     }
 
     @Override
-    public Payment getFirstPaymentWithUserAfter(LocalDate date, String username) throws PaymentNotFoundException {
-        return paymentRepository
-                .getFirstByRecipientEqualsOrPayerEqualsAndDateAfterOrderByDateDesc(
-                        username, username, date).orElseThrow(new PaymentNotFoundException());
+    public Payment getFirstPaymentWithUserAfter(LocalDateTime date, String username) throws PaymentNotFoundException {
+        List<Payment> list = paymentRepository
+                .getByRecipientEqualsOrPayerEqualsAndDateGreaterThanOrderByDateAsc(
+                        username, username, date);
+        for (Payment payment: list) {
+            if (payment.getDate().isAfter(date)) return payment;
+        }
+        return null;
+    }
+
+    @Override
+    public Payment getFirstPaymentWithUserBefore(Long paymentId, String username) throws PaymentNotFoundException {
+        Payment payment = paymentRepository
+                .findFirstByPaymentId(paymentId).orElseThrow(new PaymentNotFoundException());
+
+        return getFirstPaymentWithUserBefore(payment.getDate(), username);
+    }
+
+    @Override
+    public Payment getFirstPaymentWithUserAfter(Long paymentId, String username) throws PaymentNotFoundException {
+        Payment payment = paymentRepository
+                .findFirstByPaymentId(paymentId).orElseThrow(new PaymentNotFoundException());
+
+        return getFirstPaymentWithUserAfter(payment.getDate(), username);
+    }
+
+    @Override
+    public Payment getPaymentById(Long paymentId) throws PaymentNotFoundException {
+        return paymentRepository.findFirstByPaymentId(paymentId)
+                .orElseThrow(new PaymentNotFoundException());
     }
 }

@@ -2,14 +2,14 @@ package com.dbteam.service.serviceImpl;
 
 import com.dbteam.exception.GroupNotFoundException;
 import com.dbteam.exception.PersonNotFoundException;
-import com.dbteam.model.Group;
-import com.dbteam.model.Person;
+import com.dbteam.model.db.Group;
+import com.dbteam.model.db.Person;
 import com.dbteam.repository.GroupRepository;
 import com.dbteam.service.GroupService;
 import com.dbteam.service.PersonService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.Optional;
 
 @Service
@@ -51,18 +51,24 @@ public class GroupServiceImpl implements GroupService {
         } finally {
             //TODO: add some initial state for the group
             //TODO: maybe it's better to move this line to PersonService
+            if (person.getGroupChatsStates() == null) person.setGroupChatsStates(new HashMap<>());
             person.getGroupChatsStates().put(groupChatId, "INITIAL_STATE");
             personService.updatePerson(person);
             group.getPeople().add(person);
+            //TODO: add groupChatId to list of groupIds in person
             updateGroup(group);
         }
     }
 
     @Override
-    public Boolean isUserInGroup(Long groupChatId, String username) throws GroupNotFoundException, PersonNotFoundException {
-        Group group = findGroupById(groupChatId);
-        Person person = personService.findPersonByUsername(username);
-        return group.getPeople().contains(person);
+    public Boolean isUserInGroup(Long groupChatId, String username) {
+        Group group = null;
+        try {
+            group = findGroupById(groupChatId);
+        } catch (GroupNotFoundException e) {
+            return false;
+        }
+        return group.getPeople().stream().anyMatch(p -> p.getUsername().equals(username));
     }
 }
 

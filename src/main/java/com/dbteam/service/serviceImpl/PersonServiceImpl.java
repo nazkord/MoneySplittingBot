@@ -1,10 +1,9 @@
 package com.dbteam.service.serviceImpl;
 
 import com.dbteam.exception.PersonNotFoundException;
-import com.dbteam.model.Person;
+import com.dbteam.model.db.Person;
 import com.dbteam.repository.PersonRepository;
 import com.dbteam.service.PersonService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -20,6 +19,7 @@ public class PersonServiceImpl implements PersonService {
 
     @Override
     public void addPerson(Person person) {
+        person.setUsername(person.getUsername().toLowerCase());
         personRepository.save(person);
     }
 
@@ -44,8 +44,13 @@ public class PersonServiceImpl implements PersonService {
     }
 
     @Override
-    public void updatePersonGroupChatState(String username, String newState, Long groupChatId) throws PersonNotFoundException {
-        Person person = findPersonByUsername(username);
+    public void updatePersonGroupChatState(String username, String newState, Long groupChatId) {
+        Person person = null;
+        try {
+            person = findPersonByUsername(username);
+        } catch (PersonNotFoundException e) {
+            return;
+        }
         person.getGroupChatsStates().put(groupChatId, newState);
         updatePerson(person);
     }

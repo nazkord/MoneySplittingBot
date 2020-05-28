@@ -1,6 +1,6 @@
 package com.dbteam.repository;
 
-import com.dbteam.model.Payment;
+import com.dbteam.model.db.Payment;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
@@ -9,7 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -24,12 +24,12 @@ public class PaymentRepositoryTest {
     @BeforeAll()
     public void setUp() {
 
-        Payment payment1 = new Payment(1L,1L,LocalDate.of(2000, 12, 27),"Vasia", 10D, "Pronia", true);
-        Payment payment2 = new Payment(2L,1L,LocalDate.of(2010, 1, 1),"Pronia", 20D, "Vasia", false);
-        Payment payment3 = new Payment(3L,1L,LocalDate.of(2015, 12, 27),"Vasia", 30D, "Pronia", false);
-        Payment payment4 = new Payment(4L,1L,LocalDate.of(2017, 12, 27), "Pronia", 40D, "Vasia", true);
-        Payment payment5 = new Payment(5L,2L,LocalDate.of(2020, 12, 27), "Vasia", 50D, "Pronia", true);
-        Payment payment6 = new Payment(6L,2L,LocalDate.of(2090, 12, 27), "Pronia", 60D, "Vasia", false);
+        Payment payment1 = new Payment(1L,1L,LocalDateTime.of(2000, 12, 27, 0, 0),"Vasia", 10D, "Pronia", true);
+        Payment payment2 = new Payment(2L,1L,LocalDateTime.of(2010, 1, 1, 0, 0),"Pronia", 20D, "Vasia", false);
+        Payment payment3 = new Payment(3L,1L,LocalDateTime.of(2015, 12, 27, 0, 0),"Vasia", 30D, "Pronia", false);
+        Payment payment4 = new Payment(4L,1L,LocalDateTime.of(2017, 12, 27, 0, 0), "Pronia", 40D, "Vasia", true);
+        Payment payment5 = new Payment(5L,2L,LocalDateTime.of(2020, 12, 27, 0, 0), "Vasia", 50D, "Pronia", true);
+        Payment payment6 = new Payment(6L,2L,LocalDateTime.of(2090, 12, 27, 0, 0), "Pronia", 60D, "Vasia", false);
         paymentRepository.saveAll(List.of(payment1, payment2, payment3, payment4, payment5, payment6));
     }
 
@@ -95,12 +95,12 @@ public class PaymentRepositoryTest {
     }
 
     @Test
-    public void getFirstPaymentWithUserBeforeAndAfter() {
+    public void getFirstPaymentWithUserAfter() {
 
         // when
         Payment payment = paymentRepository
-                .getFirstByRecipientEqualsOrPayerEqualsAndDateAfterOrderByDateDesc("Pronia",
-                        "Pronia", LocalDate.of(2020, 12, 27)).orElse(null);
+                .getByRecipientEqualsOrPayerEqualsAndDateGreaterThanOrderByDateAsc("Pronia",
+                        "Pronia", LocalDateTime.of(2020, 12, 27, 0 ,0)).get(0);
 
         //then
         assert payment != null;
@@ -110,18 +110,106 @@ public class PaymentRepositoryTest {
     }
 
     @Test
-    public void getFirstByRecipientEqualsOrPayerEqualsAndDateBeforeOrderByDateDesc () {
+    public void getFirstPaymentWithUserBefore () {
         // when
         Payment payment = paymentRepository
-                .getFirstByRecipientEqualsOrPayerEqualsAndDateBeforeOrderByDateDesc("Pronia",
+                .getByRecipientEqualsOrPayerEqualsAndDateLessThanOrderByDateDesc("Pronia",
                         "Pronia",
-                        LocalDate.of(2090, 12, 27)).orElse(null);
+                        LocalDateTime.of(2090, 12, 27, 0, 0)).get(0);
 
         // then
         assert payment != null;
         assertEquals(2020, payment.getDate().getYear());
         assertEquals(12, payment.getDate().getMonth().getValue());
         assertEquals(27, payment.getDate().getDayOfMonth());
+    }
+
+
+    @Test
+    public void getFirstPaymentWithUserBeforePayment () {
+        //given
+        Payment payment1 = new Payment(
+                1L,
+                0L,
+                LocalDateTime.of(2000, 1, 1,0, 1),
+                "jan",
+                1D,
+                "kuba",
+                false);
+        Payment payment2 = new Payment(
+                2L,
+                0L,
+                LocalDateTime.of(2000, 1, 1,0, 2),
+                "kuba",
+                1D,
+                "jan",
+                false);
+        Payment payment3 = new Payment(
+                3L,
+                0L,
+                LocalDateTime.of(2000, 1, 1,0, 3),
+                "jan",
+                1D,
+                "kuba",
+                false);
+        paymentRepository.save(payment1);
+        paymentRepository.save(payment2);
+        paymentRepository.save(payment3);
+
+        // when
+        List<Payment> payments = paymentRepository
+                .getByRecipientEqualsOrPayerEqualsAndDateLessThanOrderByDateDesc(
+                        "kuba",
+                        "kuba",
+                        payment3.getDate());
+        Payment payment = payments.get(1);
+
+        // then
+        assert payment != null;
+        assertEquals(2, payment.getDate().getMinute());
+    }
+
+    @Test
+    public void getFirstPaymentWithUserAfterPayment () {
+        //given
+        Payment payment1 = new Payment(
+                1L,
+                0L,
+                LocalDateTime.of(2000, 1, 1,0, 1),
+                "jan",
+                1D,
+                "kuba",
+                false);
+        Payment payment2 = new Payment(
+                2L,
+                0L,
+                LocalDateTime.of(2000, 1, 1,0, 2),
+                "kuba",
+                1D,
+                "jan",
+                false);
+        Payment payment3 = new Payment(
+                3L,
+                0L,
+                LocalDateTime.of(2000, 1, 1,0, 3),
+                "jan",
+                1D,
+                "kuba",
+                false);
+        paymentRepository.save(payment1);
+        paymentRepository.save(payment2);
+        paymentRepository.save(payment3);
+
+        // when
+        Payment payment = paymentRepository
+                .getByRecipientEqualsOrPayerEqualsAndDateGreaterThanOrderByDateAsc(
+                        "kuba",
+                        "kuba",
+                        payment1.getDate()).get(1);
+
+        // then
+        assert payment != null;
+        assertEquals(2, payment.getDate().getMinute());
     }
 
 }
