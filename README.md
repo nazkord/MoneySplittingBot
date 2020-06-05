@@ -69,6 +69,14 @@ Database models are in [model.db](https://github.com/nazkord/MoneySplittingBot/t
 
 ### Services
 
+[Services](https://github.com/nazkord/MoneySplittingBot/tree/master/src/main/java/com/dbteam/service) are responsible for receiving and updating current information in the database. They are used in [abilities](###-handlers) handling user’s requests.  
+- [GroupService](https://github.com/nazkord/MoneySplittingBot/blob/master/src/main/java/com/dbteam/service/GroupService.java) is responsible for handling requests related to group chats. It can add a new user to the group, check if the user belongs to a certain group, add a new group, update group or find group by its ID.
+- [PersonService](https://github.com/nazkord/MoneySplittingBot/blob/master/src/main/java/com/dbteam/service/PersonService.java) is responsible for handling requests related to users. It can add new users to the database, update user states or get its states.
+- [PaymentService](https://github.com/nazkord/MoneySplittingBot/blob/master/src/main/java/com/dbteam/service/PaymentService.java) is responsible for handling requests related to user’s payments. It can find payments of a certain user, confirmed and unconfirmed payments of certain recipient or payer, confirmed or unconfirmed payments of a group or find a payment by ID.
+- [PurchaseService](https://github.com/nazkord/MoneySplittingBot/blob/master/src/main/java/com/dbteam/service/PurchaseService.java) is responsible for handling requests related to purchases. It can add new purchases or remove them from the database, return all purchases of a certain group, return purchases of a certain buyer or receiver and find a purchase by ID.
+- [BalanceService](https://github.com/nazkord/MoneySplittingBot/blob/master/src/main/java/com/dbteam/service/BalanceService.java) is responsible for getting balance states of a certain user, i.e. how much this user owes others or how much others owe him/her (this difference is shown by the sing before amount: positive amounts mean that others owe to the user and negative numbers mean that the user owes them).
+
+
 ### Handlers
 
 Handlers respond to various user's actions and events. We use them directly in [MoneySplittingBot](https://github.com/nazkord/MoneySplittingBot/blob/master/src/main/java/com/dbteam/bot/MoneySplittingBot.java) class.
