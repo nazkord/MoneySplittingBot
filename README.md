@@ -69,7 +69,7 @@ Database models are in [model.db](https://github.com/nazkord/MoneySplittingBot/t
 
 ### Services
 
-[Services](https://github.com/nazkord/MoneySplittingBot/tree/master/src/main/java/com/dbteam/service) are responsible for receiving and updating current information in the database. They are used in [abilities](###-handlers) handling user’s requests.  
+[Services](https://github.com/nazkord/MoneySplittingBot/tree/master/src/main/java/com/dbteam/service) are responsible for receiving and updating current information in the database. They are used in [abilities](#-handlers) handling user’s requests.  
 - [GroupService](https://github.com/nazkord/MoneySplittingBot/blob/master/src/main/java/com/dbteam/service/GroupService.java) is responsible for handling requests related to group chats. It can add a new user to the group, check if the user belongs to a certain group, add a new group, update group or find group by its ID.
 - [PersonService](https://github.com/nazkord/MoneySplittingBot/blob/master/src/main/java/com/dbteam/service/PersonService.java) is responsible for handling requests related to users. It can add new users to the database, update user states or get its states.
 - [PaymentService](https://github.com/nazkord/MoneySplittingBot/blob/master/src/main/java/com/dbteam/service/PaymentService.java) is responsible for handling requests related to user’s payments. It can find payments of a certain user, confirmed and unconfirmed payments of certain recipient or payer, confirmed or unconfirmed payments of a group or find a payment by ID.
