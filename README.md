@@ -120,6 +120,13 @@ Database models are in [model.db](https://github.com/nazkord/MoneySplittingBot/t
 
 ### Repositories
 
+[Repositories](https://github.com/nazkord/MoneySplittingBot/tree/master/src/main/java/com/dbteam/repository) allow us to hide the data store specific implementation details and enable you to implement business code on a higher abstraction level. In our project we used [Spring Boot Starter Data MongoDB](https://spring.io/guides/gs/accessing-data-mongodb/) to implement below mentioned repositories.
+
+* [GroupRepository](https://github.com/nazkord/MoneySplittingBot/blob/master/src/main/java/com/dbteam/repository/GroupRepository.java) allows us to find a Group by particular id.
+* [PersonRepository](https://github.com/nazkord/MoneySplittingBot/blob/master/src/main/java/com/dbteam/repository/PersonRepository.java) allows us to find a Person by telegram username.
+* [PaymentRepository](https://github.com/nazkord/MoneySplittingBot/blob/master/src/main/java/com/dbteam/repository/PaymentRepository.java) allows us to filter Payments in Group by recipient, payer, payment status and date.
+* [PurchaseRepository](https://github.com/nazkord/MoneySplittingBot/blob/master/src/main/java/com/dbteam/repository/PurchaseRepository.java) allows us to filter Purchase in Group by recipients, buyer and date.
+
 ### Services
 
 [Services](https://github.com/nazkord/MoneySplittingBot/tree/master/src/main/java/com/dbteam/service) are responsible for receiving and updating current information in the database. They are used in [ability handlers](#handlers) handling user’s requests.  
